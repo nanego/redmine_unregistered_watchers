@@ -13,9 +13,23 @@ class IssuesController
         params[:issue][:unregistered_watchers].each do |email|
           @unregistered_watchers << UnregisteredWatcher.new(email: email)
         end
-        # update_journal_with_unregistered_users unless @issue.new_record? # TODO
+        update_journal_with_unregistered_watchers unless @issue.new_record?
         @issue.unregistered_watchers = @unregistered_watchers
       end
+    end
+
+    def update_journal_with_unregistered_watchers
+      @current_journal = @issue.init_journal(User.current)
+      unregistered_watchers_before_change = @issue.unregistered_watchers.map(&:email)
+      unregistered_watchers = @unregistered_watchers.map(&:email)
+      # unregistered watchers removed
+      @current_journal.details << JournalDetail.new(:property => 'unregistered_watchers',
+                                                    :old_value => (unregistered_watchers_before_change - unregistered_watchers).reject(&:blank?).join(","),
+                                                    :value => nil) if (unregistered_watchers_before_change - unregistered_watchers).present?
+      # unregistered watchers added
+      @current_journal.details << JournalDetail.new(:property => 'unregistered_watchers',
+                                                    :old_value => nil,
+                                                    :value => (unregistered_watchers - unregistered_watchers_before_change).reject(&:blank?).join(","))  if (unregistered_watchers - unregistered_watchers_before_change).present?
     end
 
 end

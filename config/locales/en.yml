@@ -2,3 +2,7 @@
 en:
   field_unregistered_watcher: "Notify unregistered watchers"
   project_module_unregistered_watchers: "Unregistered watchers"
+  text_journal_unregistered_watcher_added: "unregistered watcher has been added"
+  text_journal_unregistered_watchers_added: "unregistered watchers have been added"
+  text_journal_unregistered_watcher_deleted: "unregistered watcher has been removed"
+  text_journal_unregistered_watchers_deleted: "unregistered watchers have been removed"
