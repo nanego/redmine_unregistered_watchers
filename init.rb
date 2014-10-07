@@ -7,6 +7,8 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'redmine_unregistered_watchers/issues_controller_patch'
   require_dependency 'redmine_unregistered_watchers/project_patch'
   require_dependency 'redmine_unregistered_watchers/projects_helper_patch'
+  require_dependency 'redmine_unregistered_watchers/journal_patch'
+  require_dependency 'redmine_unregistered_watchers/mailer_patch'
 end
 
 Redmine::Plugin.register :redmine_unregistered_watchers do

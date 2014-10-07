@@ -2,7 +2,7 @@ require_dependency 'projects_helper'
 
 module ProjectsHelper
 
-  # unless instance_methods.include?(:project_settings_tabs_with_unregistered_watchers)
+  unless instance_methods.include?(:project_settings_tabs_with_unregistered_watchers)
     def project_settings_tabs_with_unregistered_watchers
       tabs = project_settings_tabs_without_unregistered_watchers
       if @project.module_enabled?("unregistered_watchers")
@@ -12,6 +12,6 @@ module ProjectsHelper
       tabs
     end
     alias_method_chain :project_settings_tabs, :unregistered_watchers
-  # end
+  end
 
 end

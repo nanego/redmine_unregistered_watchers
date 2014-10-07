@@ -1,3 +1,0 @@
-= redmine_unregistered_watchers
-
-Description goes here
