@@ -1,11 +1,11 @@
 Redmine Unregistered Watchers plugin
 ======================
 
-This Redmine plugin allows us to add watchers that are not registered. These watchers will only be notify when selected status are updated.
+This Redmine plugin allows us to add watchers to issues when these users are not registered. These watchers will only be notified when the selected status are updated.
 
-This new module can be activate by project.
-Then, for each issue, we specify the emails of the unregistered watchers.
-A new panel in the project settings make it possible de specify which issue status generate an email to these unregister watchers. It's also there that we specify the content of the email generated regarding the new issue status.
+This new module can be activated by project.
+For each issue, we specify the email addresses of the unregistered watchers.
+A new panel in the project settings make it possible de specify which status update generate an email to these unregister watchers. It's also in the project settings that we specify the content of the email generated regarding the new issue status.
 
 
 Installation
