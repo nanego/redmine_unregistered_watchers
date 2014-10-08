@@ -14,7 +14,10 @@ class Mailer
                     'Issue-Author' => issue.author.login
     @email_content = notif.email_body
     mail :to => unregistered_watchers,
-         :subject => "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}"
+         :subject => "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}" do |format|
+      format.text { render layout: 'mailer-unregistered-watchers' }
+      format.html { render layout: 'mailer-unregistered-watchers' } unless Setting.plain_text_mail?
+    end
   end
 
 end

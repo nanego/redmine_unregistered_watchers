@@ -1,0 +1,10 @@
+<table>
+  <tbody>
+    <th style="text-align: right;"><%= l("setting_emails_footer_for_unregistered_watchers") %> :</th>
+    <tr>
+      <td>
+        <%= text_area_tag "settings[emails_footer_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'], :id => "settings_emails_footer_for_unregistered_watchers", :class => 'wiki-edit', :rows => 5 %>
+      </td>
+    </tr>
+  </tbody>
+</table>

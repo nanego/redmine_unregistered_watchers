@@ -1,0 +1,8 @@
+<% if Setting.emails_header.present? -%>
+<%= Setting.emails_header %>
+<% end -%>
+<%= yield %>
+<% if Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'].present? -%>
+-- 
+<%= Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'] %>
+<% end -%>

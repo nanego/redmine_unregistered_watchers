@@ -5,3 +5,4 @@ fr:
   text_journal_unregistered_watchers_added: "observateurs non inscrits ont été ajoutés"
   text_journal_unregistered_watcher_deleted: "observateur non inscrit a été supprimé"
   text_journal_unregistered_watchers_deleted: "observateurs non inscrits ont été supprimés"
+  setting_emails_footer_for_unregistered_watchers: "Pied-de-page des emails pour les observateurs non inscrits"

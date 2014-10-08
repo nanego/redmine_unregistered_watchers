@@ -6,3 +6,4 @@ en:
   text_journal_unregistered_watchers_added: "unregistered watchers have been added"
   text_journal_unregistered_watcher_deleted: "unregistered watcher has been removed"
   text_journal_unregistered_watchers_deleted: "unregistered watchers have been removed"
+  setting_emails_footer_for_unregistered_watchers: "Email footer for unregistered watchers"
