@@ -1,0 +1,7 @@
+<% if @project.module_enabled?("unregistered_watchers") && @issue.unregistered_watchers.present? %>
+  <hr>
+  <div id="current_unregistered_watchers_list" style="display: flex;">
+    <span id="label_show_watchers"><%= l("project_module_unregistered_watchers") + " : " %></span>
+    <span> <%= @issue.unregistered_watchers.map(&:email).join(', ') %>  </span>
+  </div>
+<% end %>

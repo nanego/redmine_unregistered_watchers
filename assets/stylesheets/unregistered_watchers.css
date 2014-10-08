@@ -1,1 +1,10 @@
 .icon-x-close { background-image: url(../../../images/close.png); margin-left:4px; margin-right:2px; }
+
+#label_show_watchers {
+    /* color: #666; */
+    width: 22%;
+    font-weight: bold;
+    display: inline-block;
+    /* vertical-align: super; */
+    /* margin-top: 4px; */
+}
