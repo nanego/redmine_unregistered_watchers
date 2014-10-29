@@ -6,3 +6,5 @@ fr:
   text_journal_unregistered_watcher_deleted: "observateur non inscrit a été supprimé"
   text_journal_unregistered_watchers_deleted: "observateurs non inscrits ont été supprimés"
   setting_emails_footer_for_unregistered_watchers: "Pied-de-page des emails pour les observateurs non inscrits"
+  default_email_footer_for_unregistered_watchers: "Vous recevez ce message car vous avez été inscrit comme observateur sur cette demande."
+  default_email_bodies_by_status: "Messages par défaut par statut"

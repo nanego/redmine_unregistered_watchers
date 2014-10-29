@@ -11,8 +11,8 @@ class UnregisteredWatchersController < ApplicationController
         notif.email_body = params[:notifications][:emails][status_id]
         @notifications << notif
       end
-      @project.unregistered_watchers_notifications = @notifications
     end
+    @project.unregistered_watchers_notifications = @notifications
     redirect_to settings_project_path(@project, :tab => :unregistered_watchers)
   end
 

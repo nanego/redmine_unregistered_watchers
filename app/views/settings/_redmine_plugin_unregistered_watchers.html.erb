@@ -1,10 +1,26 @@
 <table>
   <tbody>
-    <th style="text-align: right;"><%= l("setting_emails_footer_for_unregistered_watchers") %> :</th>
+    <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %></th>
+    <% IssueStatus.all.each do |status| %>
     <tr>
       <td>
-        <%= text_area_tag "settings[emails_footer_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'], :id => "settings_emails_footer_for_unregistered_watchers", :class => 'wiki-edit', :rows => 5 %>
+        <%= status.name %> :
+      </td>
+      <td>
+        <%= text_area_tag "settings[status][#{status.id}]", Setting['plugin_redmine_unregistered_watchers']['status'].present? ? Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s] : "", :id => "settings_status_default_messages", :class => 'wiki-edit', :size => '72x4' %>
       </td>
     </tr>
+    <% end %>
+  </tbody>
+</table>
+<br/>
+<table>
+  <tbody>
+  <th colspan="2" style="text-align: left;"><%= l(:setting_emails_footer_for_unregistered_watchers) %></th>
+  <tr>
+    <td>
+      <%= text_area_tag "settings[emails_footer_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'].present? ? Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'] : l(:default_email_footer_for_unregistered_watchers), :id => "settings_emails_footer_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
+    </td>
+  </tr>
   </tbody>
 </table>

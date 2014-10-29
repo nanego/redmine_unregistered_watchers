@@ -4,7 +4,7 @@ class CreateUnregisteredWatchers < ActiveRecord::Migration
       t.column :issue_id, :integer
       t.column :email, :string
       t.timestamps
-    end
+    end unless ActiveRecord::Base.connection.table_exists? 'unregistered_watchers'
   end
 
   def self.down

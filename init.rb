@@ -24,6 +24,7 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
   project_module :unregistered_watchers do
     permission :set_unregistered_watchers_to_issues, {  }
   end
-  settings :default => { 'emails_footer_for_unregistered_watchers' => ""},
+  settings :default => { 'emails_footer_for_unregistered_watchers' => "",
+                         'status' => []},
            :partial => 'settings/redmine_plugin_unregistered_watchers'
 end
