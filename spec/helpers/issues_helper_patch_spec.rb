@@ -5,6 +5,7 @@ describe "IssuesHelperPatch" do
   include IssuesHelper
   include CustomFieldsHelper
   include ERB::Util
+  include ActionView::Helpers::TagHelper
 
   fixtures :projects, :trackers, :issue_statuses, :issues,
            :enumerations, :users, :issue_categories,
@@ -26,25 +27,25 @@ describe "IssuesHelperPatch" do
 
   it "should IssuesHelper#show_detail with no_html should show a changing unregistered watcher" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => nil, :value => 'captain@example.com', :prop_key => nil)
-    (show_detail(detail, true)).should == "captain@example.com"
+    expect(show_detail(detail, true)).to eq "captain@example.com"
   end
 
   it "should IssuesHelper#show_detail with no_html should show a deleted unregistered watcher" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => 'captain@example.com', :value => nil, :prop_key => nil)
-    (show_detail(detail, true)).should == "captain@example.com"
+    expect(show_detail(detail, true)).to eq "captain@example.com"
   end
 
   it "should IssuesHelper#show_detail with html should show a new unregistered watcher with HTML highlights" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => nil, :value => 'captain@example.com', :prop_key => nil)
     detail.id = 1
     result = show_detail(detail, false)
-    result.should include("1 unregistered watcher has been added (<span class=\"journal_details\" data-detail-id=\"1\">captain@example.com</span>)")
+    expect(result).to include("1 unregistered watcher has been added (<span class=\"journal_details\" data-detail-id=\"1\">captain@example.com</span>)")
   end
 
   it "should IssuesHelper#show_detail with html should show a deleted unregistered watcher with HTML highlights" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => 'captain@example.com', :value => nil, :prop_key => nil)
     html = show_detail(detail, false)
-    html.should include("1 unregistered watcher has been removed (<del class=\"journal_details\" data-detail-id=\"null\">captain@example.com</del>)")
+    expect(html).to include("1 unregistered watcher has been removed (<del class=\"journal_details\" data-detail-id=\"null\">captain@example.com</del>)")
   end
 
   it "should IssuesHelper#show_detail with html should show all new unregistered watchers with HTML highlights" do
@@ -52,14 +53,14 @@ describe "IssuesHelperPatch" do
     detail.id = 1
     result = show_detail(detail, false)
     html = "2 unregistered watchers have been added (<span class=\"journal_details\" data-detail-id=\"1\">captain@example.com, moos@example.com</span>)"
-    result.should include(html)
+    expect(result).to include(html)
   end
 
   it "should IssuesHelper#show_detail with html should show all deleted unregistered watchers with HTML highlights" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => 'captain@example.com,moos@example.com', :value => nil, :prop_key => nil)
     result = show_detail(detail, false)
     html = "2 unregistered watchers have been removed (<del class=\"journal_details\" data-detail-id=\"null\">captain@example.com, moos@example.com</del>)"
-    result.should include(html)
+    expect(result).to include(html)
   end
 
 
@@ -67,43 +68,45 @@ describe "IssuesHelperPatch" do
 
   it "should IssuesHelper#show_detail with no_html should show a changing attribute" do
     detail = JournalDetail.new(:property => 'attr', :old_value => '40', :value => '100', :prop_key => 'done_ratio')
-    (show_detail(detail, true)).should == "% Done changed from 40 to 100"
+    expect(show_detail(detail, true)).to eq "% Done changed from 40 to 100"
   end
 
   it "should IssuesHelper#show_detail with no_html should show a new attribute" do
     detail = JournalDetail.new(:property => 'attr', :old_value => nil, :value => '100', :prop_key => 'done_ratio')
-    (show_detail(detail, true)).should == "% Done set to 100"
+    expect(show_detail(detail, true)).to eq("% Done set to 100")
   end
 
   it "should IssuesHelper#show_detail with no_html should show a deleted attribute" do
     detail = JournalDetail.new(:property => 'attr', :old_value => '50', :value => nil, :prop_key => 'done_ratio')
-    (show_detail(detail, true)).should == "% Done deleted (50)"
+    expect(show_detail(detail, true)).to eq "% Done deleted (50)"
   end
 
   it "should IssuesHelper#show_detail with html should show a changing attribute with HTML highlights" do
     detail = JournalDetail.new(:property => 'attr', :old_value => '40', :value => '100', :prop_key => 'done_ratio')
     html = show_detail(detail, false)
 
-    html.should include('<strong>% Done</strong>')
-    html.should include('<i>40</i>')
-    html.should include('<i>100</i>')
+    expect(html).to include('<strong>% Done</strong>')
+    expect(html).to include('<i>40</i>')
+    expect(html).to include('<i>100</i>')
   end
 
   it "should IssuesHelper#show_detail with html should show a new attribute with HTML highlights" do
     detail = JournalDetail.new(:property => 'attr', :old_value => nil, :value => '100', :prop_key => 'done_ratio')
     html = show_detail(detail, false)
 
-    html.should include('<strong>% Done</strong>')
-    html.should include('<i>100</i>')
+    expect(html).to include('<strong>% Done</strong>')
+    expect(html).to include('<i>100</i>')
   end
 
   it "should IssuesHelper#show_detail with html should show a deleted attribute with HTML highlights" do
     detail = JournalDetail.new(:property => 'attr', :old_value => '50', :value => nil, :prop_key => 'done_ratio')
     html = show_detail(detail, false)
 
-    html.should include('<strong>% Done</strong>')
-    html.should include('<del><i>50</i></del>')
+    expect(html).to include('<strong>% Done</strong>')
+    expect(html).to include('<del><i>50</i></del>')
   end
+
+
 
   it "should IssuesHelper#show_detail with a start_date attribute should format the dates" do
     detail = JournalDetail.new(
@@ -177,7 +180,7 @@ describe "IssuesHelperPatch" do
 
   it "should IssuesHelper#show_detail should show old and new values with a custom field" do
     detail = JournalDetail.new(:property => 'cf', :prop_key => '1', :old_value => 'MySQL', :value => 'PostgreSQL')
-    (show_detail(detail, true)).should == 'Database changed from MySQL to PostgreSQL'
+    expect(show_detail(detail, true)).to eq 'Database changed from MySQL to PostgreSQL'
   end
 
   it "should IssuesHelper#show_detail should show added file" do

@@ -3,7 +3,7 @@ require "active_support/testing/assertions"
 require 'redmine_unregistered_watchers/issues_controller_patch.rb'
 require 'redmine_unregistered_watchers/issue_patch.rb'
 
-describe IssuesController do
+describe IssuesController, type: :controller do
   render_views
   include ActiveSupport::Testing::Assertions
 
@@ -21,36 +21,43 @@ describe IssuesController do
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
     UnregisteredWatchersNotification.create!(:issue_status_id => 1, :project_id => 1, :email_body => "Email body content")
 
-    assert_difference 'Issue.count' do
-      post :create, :project_id => 1,
-           :issue => {:tracker_id => 3,
-                      :subject => 'This is the test_new issue',
-                      :description => 'This is the description',
-                      :priority_id => 5,
-                      :estimated_hours => '',
-                      :unregistered_watchers => ["captain@example.com", "boss@email.com"],
-                      :custom_field_values => {'2' => 'Value for field 2'}}
+    assert_difference 'ActionMailer::Base.deliveries.size' do
+      assert_difference 'Issue.count' do
+        post :create, :project_id => 1,
+             :issue => {:tracker_id => 3,
+                        :subject => 'This is the test_new issue',
+                        :description => 'This is the description',
+                        :priority_id => 5,
+                        :estimated_hours => '',
+                        :unregistered_watchers => ["captain@example.com", "boss@email.com"],
+                        :custom_field_values => {'2' => 'Value for field 2'}}
+      end
     end
-    response.should redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
-    ActionMailer::Base.deliveries.size.should == 2
+    expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
+
+    ActionMailer::Base.deliveries.each do |d|
+      puts d.inspect
+    end
+
+    expect(ActionMailer::Base.deliveries.size).to eq 2
 
     default_mail = ActionMailer::Base.deliveries.first
-    assert default_mail['bcc'].to_s.include?(User.find(2).mail)
-    assert !default_mail['bcc'].to_s.include?("captain@example.com")
-    assert !default_mail['bcc'].to_s.include?("boss@email.com")
+    expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
+    expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
+    expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
     default_mail.parts.each do |part|
-      assert part.body.raw_source.should include "has been reported by"
-      assert !(part.body.raw_source.should_not include "Email body content")
+      expect(part.body.raw_source).to include("has been reported by")
+      expect(!(part.body.raw_source)).to_not include("Email body content")
     end
 
     unregistered_watchers_email = ActionMailer::Base.deliveries.second
-    assert !unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail)
-    assert unregistered_watchers_email['bcc'].to_s.include?("captain@example.com")
-    assert unregistered_watchers_email['bcc'].to_s.include?("boss@email.com")
+    expect(!unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail))
+    expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
+    expect(unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
     unregistered_watchers_email.parts.each do |part|
-      assert !(part.body.raw_source.should_not include "has been reported by")
-      assert part.body.raw_source.should include "Email body content"
+      expect(!(part.body.raw_source)).to_not include "has been reported by"
+      expect(part.body.raw_source).to include "Email body content"
     end
   end
 
@@ -74,24 +81,24 @@ describe IssuesController do
         }
       end
     end
-    ActionMailer::Base.deliveries.size.should == 2
+    expect(ActionMailer::Base.deliveries.size).to eq 2
 
     default_mail = ActionMailer::Base.deliveries.first
-    assert default_mail['bcc'].to_s.include?(User.find(2).mail)
-    assert !default_mail['bcc'].to_s.include?("captain@example.com")
-    assert !default_mail['bcc'].to_s.include?("boss@email.com")
+    expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
+    expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
+    expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
     default_mail.parts.each do |part|
-      assert part.body.raw_source.should include "has been updated by"
-      assert !(part.body.raw_source.should_not include content)
+      expect(part.body.raw_source).to include "has been updated by"
+      expect(!(part.body.raw_source)).to_not include content
     end
 
     unregistered_watchers_email = ActionMailer::Base.deliveries.second
-    assert !unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail)
-    assert unregistered_watchers_email['bcc'].to_s.include?("captain@example.com")
-    assert !unregistered_watchers_email['bcc'].to_s.include?("boss@email.com")
+    expect(!unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail))
+    expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
+    expect(!unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
     unregistered_watchers_email.parts.each do |part|
-      assert !(part.body.raw_source.should_not include "has been updated by")
-      assert part.body.raw_source.should include content
+      expect(!(part.body.raw_source)).to_not include("has been updated by")
+      expect(part.body.raw_source).to include(content)
     end
   end
 
