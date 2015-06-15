@@ -12,7 +12,8 @@ describe IssuesController, type: :controller do
            :roles,
            :members,
            :member_roles,
-           :issue_statuses
+           :issue_statuses,
+           :email_addresses
 
   it "should send a notification to unregistered watchers after create" do
     ActionMailer::Base.deliveries.clear
@@ -21,7 +22,7 @@ describe IssuesController, type: :controller do
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
     UnregisteredWatchersNotification.create!(:issue_status_id => 1, :project_id => 1, :email_body => "Email body content")
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Issue.count' do
         post :create, :project_id => 1,
              :issue => {:tracker_id => 3,
@@ -36,10 +37,6 @@ describe IssuesController, type: :controller do
 
     expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
-    ActionMailer::Base.deliveries.each do |d|
-      puts d.inspect
-    end
-
     expect(ActionMailer::Base.deliveries.size).to eq 2
 
     default_mail = ActionMailer::Base.deliveries.first
@@ -48,7 +45,7 @@ describe IssuesController, type: :controller do
     expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include("has been reported by")
-      expect(!(part.body.raw_source)).to_not include("Email body content")
+      expect(part.body.raw_source).to_not include("Email body content")
     end
 
     unregistered_watchers_email = ActionMailer::Base.deliveries.second
@@ -56,7 +53,7 @@ describe IssuesController, type: :controller do
     expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
     expect(unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
     unregistered_watchers_email.parts.each do |part|
-      expect(!(part.body.raw_source)).to_not include "has been reported by"
+      expect(part.body.raw_source).to_not include "has been reported by"
       expect(part.body.raw_source).to include "Email body content"
     end
   end
@@ -89,7 +86,7 @@ describe IssuesController, type: :controller do
     expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include "has been updated by"
-      expect(!(part.body.raw_source)).to_not include content
+      expect(part.body.raw_source).to_not include content
     end
 
     unregistered_watchers_email = ActionMailer::Base.deliveries.second
@@ -97,7 +94,7 @@ describe IssuesController, type: :controller do
     expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
     expect(!unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
     unregistered_watchers_email.parts.each do |part|
-      expect(!(part.body.raw_source)).to_not include("has been updated by")
+      expect(part.body.raw_source).to_not include("has been updated by")
       expect(part.body.raw_source).to include(content)
     end
   end
