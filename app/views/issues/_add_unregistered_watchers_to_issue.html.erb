@@ -26,14 +26,12 @@
   <script>
     function updateUnregisteredWatchers() {
       var email = $("#user_email").val();
-      if(email==="") {
-        alert("Veuillez entrer une adresse email valide");
-      }else{
+      if(email!="" && validateEmail(email)) {
         var clean_email = email.replace(/\W/g, '');
         $("#display_unregistered_watchers").append(
-                "<span class=" + clean_email + " style='margin-right: 10px;display: block;'>" + email + // '(' + htmlContent + ')' +
-                "<a class='icon icon-x-close' href='#' style='margin-left:4px;' onclick=\"remove_user(\'" + clean_email + "\', \'"+ email +"\'); return false;\"></a>"
-                + "</span>"
+            "<span class=" + clean_email + " style='margin-right: 10px;display: block;'>" + email + // '(' + htmlContent + ')' +
+            "<a class='icon icon-x-close' href='#' style='margin-left:4px;' onclick=\"remove_user(\'" + clean_email + "\', \'"+ email +"\'); return false;\"></a>"
+            + "</span>"
         );
 
         // Add new user to hidden select box
@@ -46,6 +44,8 @@
 
         $("#display_unregistered_watchers").show();
         $("#user_email").val('');
+      }else{
+        alert("Veuillez entrer une adresse email valide");
       }
     }
 
@@ -60,6 +60,11 @@
         e.preventDefault();
         return false;
       }
+    }
+
+    function validateEmail(email) {
+      var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+      return re.test(email);
     }
 
   </script>
