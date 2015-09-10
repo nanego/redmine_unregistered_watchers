@@ -21,6 +21,7 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
   url 'https://github.com/nanego/redmine_unregistered_watchers'
   requires_redmine_plugin :redmine_base_rspec, :version_or_higher => '0.0.3' if Rails.env.test?
   requires_redmine_plugin :redmine_base_deface, :version_or_higher => '0.0.1'
+  requires_redmine_plugin :redmine_base_select2, :version_or_higher => '4.0.0'
   project_module :unregistered_watchers do
     permission :set_unregistered_watchers_to_issues, {  }
   end

@@ -1,66 +1,40 @@
 <% if @issue.project.module_enabled?("unregistered_watchers") %>
 
   <p id=issues_notify_unregistered_watchers>
-
     <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
     <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
-    <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {}, {:multiple => true, style: "display:none;"} %>
-
-    <span id="display_unregistered_watchers">
-      <% current_unregistered_watchers.each do |watcher| %>
-        <% clean_email = watcher.gsub(/[^0-9a-z ]/i, '') %>
-        <span class="<%= clean_email %>" style='margin-right: 10px;display: block;'>
-          <%= watcher %>
-          <a class="icon icon-x-close" href='#' style='margin-left:4px;' onclick="remove_user('<%= clean_email %>', '<%= watcher %>'); return false;"></a>
-        </span>
-      <% end %>
-    </span>
-
-    <span style="display: block;">
-      <%= text_field_tag 'user_email', nil, :placeholder => l('field_mail'), :onkeypress => "inputNewWatcherListener(event);" %>
-      <%= link_to "Ajouter", "#", :onclick => "updateUnregisteredWatchers(); return false;", style: "vertical-align: sub;" %>
-    </span>
-
+    <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {}, {:multiple => true} %>
   </p>
 
   <script>
-    function updateUnregisteredWatchers() {
-      var email = $("#user_email").val();
-      if(email!="" && validateEmail(email)) {
-        var clean_email = email.replace(/\W/g, '');
-        $("#display_unregistered_watchers").append(
-            "<span class=" + clean_email + " style='margin-right: 10px;display: block;'>" + email + // '(' + htmlContent + ')' +
-            "<a class='icon icon-x-close' href='#' style='margin-left:4px;' onclick=\"remove_user(\'" + clean_email + "\', \'"+ email +"\'); return false;\"></a>"
-            + "</span>"
-        );
 
-        // Add new user to hidden select box
-        var selectUsers = document.getElementById('issue_unregistered_watchers');
-        var opt = document.createElement('option');
-        opt.value = email;
-        opt.innerHTML = email;
-        opt.selected = true;
-        selectUsers.appendChild(opt);
-
-        $("#display_unregistered_watchers").show();
-        $("#user_email").val('');
-      }else{
-        alert("Veuillez entrer une adresse email valide");
-      }
-    }
-
-    function remove_user(id, email){
-      $("#display_unregistered_watchers ." + id).hide();
-      $("option[value='"+ email +"']").remove();
-    }
-
-    function inputNewWatcherListener(e) {
-      if (e.keyCode == 13) {
-        updateUnregisteredWatchers();
-        e.preventDefault();
-        return false;
-      }
-    }
+    var data = [];
+    <% current_unregistered_watchers.each do |watcher_email| %>
+      data.push({ id: '<%= watcher_email %>', text: '<%= watcher_email %>' });
+    <% end %>
+    $("#issue_unregistered_watchers").select2({
+      containerCss: {width: '300px', minwidth: '300px'},
+      width: 'style',
+      tags: true,
+      data: data,
+      tokenSeparators: [',', ' '],
+      language: {
+        noResults: function() {
+          return "Entrez une adresse email valide";
+        }
+      },
+      createTag: function (query) {
+        if(query.term != undefined && validateEmail(query.term)) {
+          return {
+            id: query.term,
+            text: query.term,
+            tag: true
+          }
+        } else {
+          return null;
+        }
+      },
+    });
 
     function validateEmail(email) {
       var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
