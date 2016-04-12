@@ -15,9 +15,10 @@ This plugin has been tested with Redmine 2.5.0+.
 
 Please apply general instructions for plugins [here](http://www.redmine.org/wiki/redmine/Plugins).
 
-Note that this plugin now depends on this other plugin:
+Note that this plugin now depends on these other plugins:
 
 * **redmine_base_deface** [here](https://github.com/jbbarth/redmine_base_deface)
+* **redmine_base_select2** [here](https://github.com/jbbarth/redmine_base_select2)
 
 First download the source or clone the plugin and put it in the "plugins/" directory of your redmine instance. Note that this is crucial that the directory is named redmine_unregistered_watchers !
 
