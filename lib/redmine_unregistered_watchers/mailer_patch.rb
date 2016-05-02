@@ -3,7 +3,12 @@ require 'mailer'
 class Mailer
 
   def self.deliver_issue_to_unregistered_watchers(issue, notif)
-    to = issue.unregistered_watchers.map(&:email)
+    if Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].present?
+      custom_field = CustomField.find_by_id(Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'])
+      to = issue.custom_field_value(custom_field)
+    else
+      to = issue.unregistered_watchers.map(&:email)
+    end
     Mailer.issue_to_unregistered_watchers(issue, to, notif).deliver
   end
 

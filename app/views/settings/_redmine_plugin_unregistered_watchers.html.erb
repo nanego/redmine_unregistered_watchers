@@ -1,6 +1,18 @@
+<div>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:send_last_note) %> :</span>
+  <span>
+    <%= radio_button_tag "settings[send_last_note]", true, Setting['plugin_redmine_unregistered_watchers']['send_last_note'] == 'true', :id => "settings_send_last_note" %>
+    <%= l(:general_text_Yes) %>
+    <%= radio_button_tag "settings[send_last_note]", false, Setting['plugin_redmine_unregistered_watchers']['send_last_note'] == 'false', :id => "settings_send_last_note" %>
+    <%= l(:general_text_No) %>
+  </span>
+</div>
+
+<br/>
+
 <table>
   <tbody>
-    <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %></th>
+    <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %> :</th>
     <% IssueStatus.all.each do |status| %>
     <tr>
       <td>
@@ -13,14 +25,24 @@
     <% end %>
   </tbody>
 </table>
+
 <br/>
-<table>
-  <tbody>
-  <th colspan="2" style="text-align: left;"><%= l(:setting_emails_footer_for_unregistered_watchers) %></th>
-  <tr>
-    <td>
-      <%= text_area_tag "settings[emails_footer_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'].present? ? Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'] : l(:default_email_footer_for_unregistered_watchers), :id => "settings_emails_footer_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
-    </td>
-  </tr>
-  </tbody>
-</table>
+
+<div>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:watcher_custom_field) %> :</span>
+  <span>
+    <%= select_tag "settings[watcher_custom_field_id]", options_for_select(IssueCustomField.all.collect{ |u| [u.name, u.id] }, Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id']), {include_blank: true, id: "settings_watcher_custom_field_id"} %>
+  </span>
+  <br>
+  <span colspan="2" style="text-align: left;font-weight: normal;"><%= l(:watcher_custom_field_hint) %> :</span>
+</div>
+
+<br/>
+
+<div>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:setting_emails_footer_for_unregistered_watchers) %> :</span>
+  <span>
+    <%= text_area_tag "settings[emails_footer_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'].present? ? Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'] : l(:default_email_footer_for_unregistered_watchers), :id => "settings_emails_footer_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
+  </span>
+</div>
+

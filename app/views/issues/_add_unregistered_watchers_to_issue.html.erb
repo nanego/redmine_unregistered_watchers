@@ -1,4 +1,4 @@
-<% if @issue.project.module_enabled?("unregistered_watchers") %>
+<% if @issue.project.module_enabled?("unregistered_watchers") && Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].blank? %>
 
   <p id=issues_notify_unregistered_watchers>
     <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>

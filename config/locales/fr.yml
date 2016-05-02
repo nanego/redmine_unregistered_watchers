@@ -8,3 +8,7 @@ fr:
   setting_emails_footer_for_unregistered_watchers: "Pied-de-page des emails pour les observateurs non inscrits"
   default_email_footer_for_unregistered_watchers: "Vous recevez ce message car vous avez été inscrit comme observateur sur cette demande."
   default_email_bodies_by_status: "Messages par défaut par statut"
+  field_message: "Message à envoyer"
+  send_last_note: "Envoyer la dernière note en guise de message ?"
+  watcher_custom_field: "Champs personnalisé correspondant aux observateurs non-inscrits"
+  watcher_custom_field_hint: "(si aucun champ n'est sélectionné, un champ de saisie sera ajouté automatiquement)"
