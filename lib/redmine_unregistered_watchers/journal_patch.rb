@@ -5,10 +5,16 @@ class Journal
   after_create :send_notification_to_unregistered_watchers
 
   def send_notification_to_unregistered_watchers
+
+    puts "002 - send_notification_to_unregistered_watchers - #{self.inspect}"
+
     updated_issue = self.journalized.reload
     if updated_issue.is_a?(Issue) && updated_issue.project.module_enabled?("unregistered_watchers") && updated_issue.unregistered_watchers.present?
       if new_status.present?
-        issue_notif = self.issue.project.unregistered_watchers_notifications.where("issue_status_id = ?", new_status.id).first
+        issue_notif = self.issue.project.unregistered_watchers_notifications.find_by_issue_status_id(new_status.id)
+
+        puts "003 - #{issue_notif.inspect}"
+
         if issue_notif.present?
           if Setting['plugin_redmine_unregistered_watchers']['send_last_note'] == 'true'
             if self.notes.present?
@@ -16,6 +22,7 @@ class Journal
             else
               note = self.journalized.journals.map(&:notes).reject(&:blank?).first
             end
+            puts "004 - note : #{note.inspect}"
             issue_notif.email_body = note if note.present?
           end
           Mailer.deliver_issue_to_unregistered_watchers(updated_issue, issue_notif)
