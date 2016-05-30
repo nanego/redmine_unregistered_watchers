@@ -1,6 +1,6 @@
 require 'mailer'
 
-class Mailer
+class Mailer < ActionMailer::Base
 
   def self.deliver_issue_to_unregistered_watchers(issue, notif)
     if Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].present?
@@ -17,9 +17,10 @@ class Mailer
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login
+    @issue = issue
     @email_content = notif.email_body
     mail :to => unregistered_watchers,
-         :subject => "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}" do |format|
+         :subject => "[#{issue.project.name}] #{issue.subject}" do |format|
       format.text { render layout: 'mailer-unregistered-watchers' }
       format.html { render layout: 'mailer-unregistered-watchers' } unless Setting.plain_text_mail?
     end
