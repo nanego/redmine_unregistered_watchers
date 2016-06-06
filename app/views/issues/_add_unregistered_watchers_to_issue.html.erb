@@ -34,6 +34,26 @@
           return null;
         }
       },
+      ajax: {
+        url: "/ldap_minequip/search.json?key=<%= User.current.api_key %>",
+        dataType: 'json',
+        delay: 250,
+        method:'GET',
+        data: function (params) {
+          return {
+            mail: params.term
+          };
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          console.log(data.results);
+          return {
+            results: data.results
+          };
+        },
+        cache: true
+      },
+      minimumInputLenght:3
     });
 
     function validateEmail(email) {
