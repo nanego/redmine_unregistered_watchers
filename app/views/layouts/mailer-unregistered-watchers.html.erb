@@ -30,9 +30,12 @@ span.footer {
 <span class="header"><%= Redmine::WikiFormatting.to_html(Setting.text_formatting, Setting.emails_header).html_safe %></span>
 <% end -%>
 <%= yield %>
-<hr />
+<% if Setting['plugin_redmine_unregistered_watchers']['emails_signature_for_unregistered_watchers'].present? -%>
+  <br/><%= Redmine::WikiFormatting.to_html(Setting.text_formatting, Setting['plugin_redmine_unregistered_watchers']['emails_signature_for_unregistered_watchers']).html_safe %>
+<% end -%>
 <% if Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'].present? -%>
-<span class="footer"><%= Redmine::WikiFormatting.to_html(Setting.text_formatting, Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers']).html_safe %></span>
+  <hr />
+  <span class="footer"><%= Redmine::WikiFormatting.to_html(Setting.text_formatting, Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers']).html_safe %></span>
 <% end -%>
 </body>
 </html>

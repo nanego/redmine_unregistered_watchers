@@ -1,7 +1,13 @@
-<%= t('email_greetings', date: @issue.created_on.to_date.to_s) %>
+<%= t('email_greetings') %>
+
+<p>
+<%= t('email_greetings2', date: @issue.created_on.to_date.to_s) %>
+</p>
+
 <p>
   <%= "<b>#{t('email_question')}</b> #{textilizable(@issue, :description, :only_path => false)}".html_safe %>
 </p>
+
 <p>
   <%= "<b>#{t('email_answer')}</b> #{textilizable(@email_content, :to_s, :only_path => false)}".html_safe  %>
 </p>
