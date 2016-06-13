@@ -1,0 +1,7 @@
+<% if @issue.project.module_enabled?("unregistered_watchers") && Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending']=='true' %>
+
+  <p id=issues_force_unregistered_watchers_notification>
+    <%= f.check_box :force_notification_to_watchers %>
+  </p>
+
+<% end %>

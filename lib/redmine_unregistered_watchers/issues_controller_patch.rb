@@ -1,6 +1,6 @@
 require_dependency 'issues_controller'
 
-class IssuesController
+class IssuesController < ApplicationController
 
   append_before_filter :set_unregistered_watchers, :only => [:create, :update]
 

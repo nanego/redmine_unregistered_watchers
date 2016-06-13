@@ -1,7 +1,12 @@
 require_dependency 'issue'
 
-class Issue
+class Issue < ActiveRecord::Base
+
+  unloadable # Send unloadable so it will not be unloaded in development
+
   has_many :unregistered_watchers
+
+  attr_accessor :force_notification_to_watchers
 
   after_create :send_notification_to_unregistered_watchers
 

@@ -1,6 +1,6 @@
 require_dependency 'journal'
 
-class Journal
+class Journal < ActiveRecord::Base
 
   after_create :send_notification_to_unregistered_watchers
 
