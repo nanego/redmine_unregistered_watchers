@@ -35,7 +35,15 @@
   </span>
   <br>
   <span colspan="2" style="text-align: left;font-weight: normal;"><%= l(:watcher_custom_field_hint) %> :</span>
+
+  <br/>
+  <span colspan="2" style="text-align: left;"><%= l(:unregistered_watchers_label) %> :</span>
+  <span>
+    <%= text_field_tag "settings[unregistered_watchers_label]", Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %>
+  </span>
 </div>
+
+
 
 <br/>
 

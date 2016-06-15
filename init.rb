@@ -27,6 +27,7 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
   end
   settings :default => { 'emails_signature_for_unregistered_watchers' => "",
                          'emails_footer_for_unregistered_watchers' => "",
+                         'unregistered_watchers_label' => "Notifier d'autres personnes",
                          'status' => [],
                          'send_last_note' => 'false'
                        },

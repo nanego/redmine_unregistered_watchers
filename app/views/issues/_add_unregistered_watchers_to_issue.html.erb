@@ -3,7 +3,7 @@
   <p id=issues_notify_unregistered_watchers>
     <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
     <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
-    <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {}, {:multiple => true} %>
+    <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {label: Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label']}, {:multiple => true} %>
   </p>
 
   <script>

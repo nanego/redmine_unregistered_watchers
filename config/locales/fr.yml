@@ -13,6 +13,7 @@ fr:
   watcher_custom_field: "Champs personnalisé correspondant aux observateurs non-inscrits"
   watcher_custom_field_hint: "(si aucun champ n'est sélectionné, un champ de saisie sera ajouté automatiquement)"
   settings_allow_force_email_sending: "Permettre à l'utilisateur de forcer l'envoi du mail au demandeur"
+  unregistered_watchers_label: "Libellé du champ ajouté automatiquement"
   field_force_notification_to_watchers: "Envoyer cette note par email au demandeur "
   email_greetings: "Bonjour"
   email_greetings2: "Veuillez trouver ci-dessous la réponse à votre demande du %{date} :"
