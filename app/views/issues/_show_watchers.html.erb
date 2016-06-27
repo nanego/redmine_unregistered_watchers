@@ -1,7 +1,7 @@
 <% if @issue.project.module_enabled?("unregistered_watchers") && Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].blank? && @issue.unregistered_watchers.present? %>
   <hr>
   <div id="current_unregistered_watchers_list" style="display: flex;">
-    <span id="label_show_watchers"><%= Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] + " : " %></span>
+    <span id="label_show_watchers"><%= Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %></span>
     <span> <%= @issue.unregistered_watchers.map(&:email).join(', ') %>  </span>
   </div>
 <% end %>
