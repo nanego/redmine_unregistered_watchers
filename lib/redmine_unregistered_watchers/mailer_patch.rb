@@ -1,4 +1,5 @@
 require 'mailer'
+include UnregisteredWatchersHelper
 
 class Mailer < ActionMailer::Base
 
@@ -18,7 +19,7 @@ class Mailer < ActionMailer::Base
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login
     @issue = issue
-    @email_content = notif.email_body
+    @email_content = email_body_with_variables(issue, notif.email_body)
     mail :to => unregistered_watchers,
          :subject => "[#{issue.project.name}] #{issue.subject}" do |format|
       format.text { render layout: 'mailer-unregistered-watchers' }
