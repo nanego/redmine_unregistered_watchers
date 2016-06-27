@@ -7,7 +7,15 @@ This new module can be activated by project.
 For each issue, we specify the email addresses of the unregistered watchers.
 A new panel in the project settings make it possible de specify which status update generate an email to these unregister watchers. It's also in the project settings that we specify the content of the email generated regarding the new issue status.
 
+It's now possible to insert variables in messages sent to watchers. You need to surround issue's attributes with 'greater than' and 'less than' signs: \<\<issue_attribute\>\>.
+Examples:
 
+    <<id>>
+    <<status>>
+    <<subject>>
+    <<tracker>>
+    <<last_note>>
+ 
 Installation
 ------------
 
