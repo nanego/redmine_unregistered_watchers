@@ -14,7 +14,9 @@ Examples:
     <<status>>
     <<subject>>
     <<tracker>>
+    <<created_on>>
     <<last_note>>
+
  
 Installation
 ------------
