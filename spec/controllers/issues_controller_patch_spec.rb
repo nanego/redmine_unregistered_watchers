@@ -20,7 +20,7 @@ describe IssuesController, type: :controller do
     @request.session[:user_id] = 2
 
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
-    UnregisteredWatchersNotification.create!(:issue_status_id => 1, :project_id => 1, :email_body => "Email body content")
+    UnregisteredWatchersNotification.create!(:issue_status_id => 2, :project_id => 1, :email_body => "Email body content")
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Issue.count' do
@@ -31,6 +31,7 @@ describe IssuesController, type: :controller do
                         :priority_id => 5,
                         :estimated_hours => '',
                         :unregistered_watchers => ["captain@example.com", "boss@email.com"],
+                        :notif_sent_to_unreg_watchers => true,
                         :custom_field_values => {'2' => 'Value for field 2'}}
       end
     end
@@ -58,6 +59,41 @@ describe IssuesController, type: :controller do
     end
   end
 
+  it "should send a notification to unregistered watchers after create unless sent notif check box has been unchecked" do
+    ActionMailer::Base.deliveries.clear
+    @request.session[:user_id] = 2
+
+    EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
+    UnregisteredWatchersNotification.create!(:issue_status_id => 2, :project_id => 1, :email_body => "Email body content")
+
+    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+      assert_difference 'Issue.count' do
+        post :create, :project_id => 1,
+             :issue => {:tracker_id => 3,
+                        :subject => 'This is the test_new issue',
+                        :description => 'This is the description',
+                        :priority_id => 5,
+                        :estimated_hours => '',
+                        :unregistered_watchers => ["captain@example.com", "boss@email.com"],
+                        :notif_sent_to_unreg_watchers => false,
+                        :custom_field_values => {'2' => 'Value for field 2'}}
+      end
+    end
+
+    expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
+
+    expect(ActionMailer::Base.deliveries.size).to eq 1 # Only default notification to REGISTERED watchers
+    default_mail = ActionMailer::Base.deliveries.first
+    expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
+    expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
+    expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
+    default_mail.parts.each do |part|
+      expect(part.body.raw_source).to include("has been reported by")
+      expect(part.body.raw_source).to_not include("Email body content")
+    end
+
+  end
+
   it "should send a notification to unregistered watchers after update ad create journal details" do
     @request.session[:user_id] = 2
     ActionMailer::Base.deliveries.clear
@@ -72,8 +108,9 @@ describe IssuesController, type: :controller do
     old_subject = issue.subject
     new_subject = 'Subject modified by IssuesControllerTest#test_post_edit'
     assert_difference 'Journal.count' do
-      assert_difference('JournalDetail.count', 2) do
+      assert_difference('JournalDetail.count', 3) do
         put :update, :id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com"],
+                                          :notif_sent_to_unreg_watchers => true,
                                           :status_id => '5' # close issue
         }
       end
@@ -97,6 +134,39 @@ describe IssuesController, type: :controller do
       expect(part.body.raw_source).to_not include("has been updated by")
       expect(part.body.raw_source).to include(content)
     end
+  end
+
+  it "should send a notification to unregistered watchers after update ad create journal details unless sent notif check box has been unchecked" do
+    @request.session[:user_id] = 2
+    ActionMailer::Base.deliveries.clear
+
+    issue = Issue.find(1)
+    content = "Custom body: the issue has been closed !"
+
+    EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
+    UnregisteredWatcher.create!(issue_id: 1, email: "captain@example.com")
+    UnregisteredWatchersNotification.create!(:issue_status_id => 5, :project_id => 1, :email_body => content)
+
+    old_subject = issue.subject
+    new_subject = 'Subject modified by IssuesControllerTest#test_post_edit'
+    assert_difference 'Journal.count' do
+      assert_difference('JournalDetail.count', 2) do
+        put :update, :id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com"],
+                                          :notif_sent_to_unreg_watchers => false,
+                                          :status_id => '5' # close issue
+        }
+      end
+    end
+    expect(ActionMailer::Base.deliveries.size).to eq 1  # Only default notification to REGISTERED watchers
+    default_mail = ActionMailer::Base.deliveries.first
+    expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
+    expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
+    expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
+    default_mail.parts.each do |part|
+      expect(part.body.raw_source).to include "has been updated by"
+      expect(part.body.raw_source).to_not include content
+    end
+
   end
 
 end

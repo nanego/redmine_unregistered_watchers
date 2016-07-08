@@ -1,4 +1,4 @@
-<% all_status = IssueStatus.all %>
+<% all_status = IssueStatus.order(:position) %>
 <div>
   <% if all_status.any? %>
 
