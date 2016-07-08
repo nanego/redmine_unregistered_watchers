@@ -18,3 +18,4 @@ en:
   email_greetings2: "Please find below the answer to your question %{date}:"
   email_question: "Your question:"
   email_answer: "Answer:"
+  setting_emails_signature_for_unregistered_watchers: "Signature added to every emails before footer"

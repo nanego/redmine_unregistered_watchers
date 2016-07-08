@@ -18,3 +18,4 @@ fr:
   email_greetings2: "Veuillez trouver ci-dessous la réponse à votre demande du %{date} :"
   email_question: "Rappel de votre demande :"
   email_answer: "Réponse :"
+  setting_emails_signature_for_unregistered_watchers: "Signature ajoutée à la fin de chaque mail, avant le pied de page"

@@ -2,6 +2,8 @@ require_dependency 'issue'
 
 class Issue < ActiveRecord::Base
 
+  include Redmine::SafeAttributes
+
   unloadable # Send unloadable so it will not be unloaded in development
 
   has_many :unregistered_watchers
