@@ -13,7 +13,7 @@ zh:
   watcher_custom_field_hint: "（若未指定自定义字段，则自动添加一个文本字段）"
   settings_allow_force_email_sending: "用户可在状态不发生变化时，强制发送信息。"
   unregistered_watchers_label: "文本字段名称"
-  field_force_notification_to_watchers: "通过Email向跟踪人员发送此批注信息。"
+  field_notif_sent_to_unreg_watchers: "通过Email向跟踪人员发送此批注信息。"
   email_greetings: "您好"
   email_greetings2: "请参考如下回复 %{date}："
   email_question: "您的问题："

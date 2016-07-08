@@ -13,7 +13,7 @@ en:
   watcher_custom_field_hint: "(if no specific custom field, a text field will be added automatically)"
   settings_allow_force_email_sending: "The user can force choose to send message without changing the status"
   unregistered_watchers_label: "Textfield label"
-  field_force_notification_to_watchers: "Send this note by email to the watchers"
+  field_notif_sent_to_unreg_watchers: "Send a notification by email to the watchers"
   email_greetings: "Hello"
   email_greetings2: "Please find below the answer to your question %{date}:"
   email_question: "Your question:"

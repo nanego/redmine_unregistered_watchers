@@ -6,13 +6,13 @@ class Issue < ActiveRecord::Base
 
   has_many :unregistered_watchers
 
-  attr_accessor :force_notification_to_watchers
+  safe_attributes 'notif_sent_to_unreg_watchers'
 
   after_create :send_notification_to_unregistered_watchers
 
   def send_notification_to_unregistered_watchers
     if self.project.module_enabled?("unregistered_watchers")
-      new_issue_notif = self.project.unregistered_watchers_notifications.where("issue_status_id = ?", IssueStatus.order("position").pluck(:id).first).first
+      new_issue_notif = self.project.unregistered_watchers_notifications.find_by_issue_status_id(status_id)
       if new_issue_notif.present?
         Mailer.deliver_issue_to_unregistered_watchers(self, new_issue_notif)
       end
