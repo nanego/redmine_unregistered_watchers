@@ -14,8 +14,4 @@ en:
   settings_allow_user_to_choose_if_email_will_be_sent: "Allow the user to choose if message is sent or not, without changing the status"
   unregistered_watchers_label: "Textfield label"
   field_notif_sent_to_unreg_watchers: "Send a notification by email to the watchers"
-  email_greetings: "Hello"
-  email_greetings2: "Please find below the answer to your question %{date}:"
-  email_question: "Your question:"
-  email_answer: "Answer:"
   setting_emails_signature_for_unregistered_watchers: "Signature added to every emails before footer"

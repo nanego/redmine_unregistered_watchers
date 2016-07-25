@@ -7,7 +7,8 @@
         <%= status.name %> :
       </td>
       <td>
-        <%= text_area_tag "settings[status][#{status.id}]", Setting['plugin_redmine_unregistered_watchers']['status'].present? ? Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s] : "", :id => "settings_status_default_messages", :class => 'wiki-edit', :size => '72x4' %>
+        <%= text_area_tag "settings[status][#{status.id}]", Setting['plugin_redmine_unregistered_watchers']['status'].present? ? Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s] : "", :id => "settings_status_default_messages_#{status.id}", :class => 'wiki-edit', :size => '72x4' %>
+        <%= wikitoolbar_for "settings_status_default_messages_#{status.id}" %>
       </td>
     </tr>
     <% end %>
@@ -38,7 +39,7 @@
 <div>
   <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:setting_emails_signature_for_unregistered_watchers) %> :</span>
   <span>
-    <%= text_area_tag "settings[emails_signature_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_signature_for_unregistered_watchers'].present? ? Setting['plugin_redmine_unregistered_watchers']['emails_signature_for_unregistered_watchers'] : l(:default_email_signature_for_unregistered_watchers), :id => "settings_emails_signature_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
+    <%= text_area_tag "settings[emails_signature_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_signature_for_unregistered_watchers'], :id => "settings_emails_signature_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
   </span>
 </div>
 

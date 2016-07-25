@@ -23,13 +23,14 @@
               <%= check_box_tag 'notifications[status_ids][]', status.id, @project.unregistered_watchers_notifications.map(&:issue_status_id).include?(status.id) %>
             </td>
             <td class="<%= status.name.try(:downcase) %>" style="text-align: left;max-width: 200px;"><%= status.name %></td>
-            <td class="emails">
+            <td class="emails" style="text-align: left;">
               <% if @project.unregistered_watchers_notifications.select{ |notif| notif[:issue_status_id] == status.id}.first.try(:email_body).present?
                    current_text = @project.unregistered_watchers_notifications.select{ |notif| notif[:issue_status_id] == status.id}.first.try(:email_body)
                  else
                    current_text = Setting['plugin_redmine_unregistered_watchers']['status'].blank? ? "" : Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s]
                  end %>
               <%= text_area_tag 'notifications[emails]['+status.id.to_s+']', current_text, rows: 5, cols: 150 %>
+              <%= wikitoolbar_for 'notifications_emails_'+status.id.to_s %>
             </td>
           </tr>
         <% end; reset_cycle %>

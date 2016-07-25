@@ -14,8 +14,4 @@ fr:
   settings_allow_user_to_choose_if_email_will_be_sent: "Permettre à l'utilisateur de choisir s'il faut envoyer un mail au demandeur ou non"
   unregistered_watchers_label: "Libellé du champ ajouté automatiquement"
   field_notif_sent_to_unreg_watchers: "Envoyer une notification par email au demandeur "
-  email_greetings: "Bonjour,"
-  email_greetings2: "Veuillez trouver ci-dessous la réponse à votre demande du %{date} :"
-  email_question: "Rappel de votre demande :"
-  email_answer: "Réponse :"
   setting_emails_signature_for_unregistered_watchers: "Signature ajoutée à la fin de chaque mail, avant le pied de page"
