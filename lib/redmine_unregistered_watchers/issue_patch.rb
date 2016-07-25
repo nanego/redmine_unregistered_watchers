@@ -15,7 +15,7 @@ class Issue < ActiveRecord::Base
   def send_notification_to_unregistered_watchers
     if self.project.module_enabled?("unregistered_watchers")
       new_issue_notif = self.project.unregistered_watchers_notifications.find_by_issue_status_id(status_id)
-      if new_issue_notif.present? && notif_sent_to_unreg_watchers
+      if new_issue_notif.present? && (Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending']=='false' || notif_sent_to_unreg_watchers)
         Mailer.deliver_issue_to_unregistered_watchers(self, new_issue_notif)
       end
     end

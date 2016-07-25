@@ -57,7 +57,7 @@
 <br/>
 
 <div>
-  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:settings_allow_force_email_sending) %> :</span>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:settings_allow_user_to_choose_if_email_will_be_sent) %> :</span>
   <span>
     <%= radio_button_tag "settings[allow_force_email_sending]", true, Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending'] == 'true', :id => "settings_allow_force_email_sending" %>
     <%= l(:general_text_Yes) %>

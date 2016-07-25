@@ -1,6 +1,6 @@
 module UnregisteredWatchersHelper
   def email_body_with_variables(issue, body)
-    updated_body = body.gsub( /<<.*>>/) do |match|
+    updated_body = body.gsub( /<<\S*>>/) do |match|
       begin
         match = match.gsub('<<', '').gsub('>>', '').to_sym
         value = @issue.try(match)
