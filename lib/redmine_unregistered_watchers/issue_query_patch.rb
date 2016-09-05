@@ -7,7 +7,7 @@ class IssueQuery < Query
   unless instance_methods.include?(:initialize_available_filters_with_unregistered_watchers)
     def initialize_available_filters_with_unregistered_watchers
       initialize_available_filters_without_unregistered_watchers
-      values = UnregisteredWatcher.all.map(&:email).compact.uniq
+      values = UnregisteredWatcher.order('LOWER(email)').map(&:email).compact.uniq
       add_available_filter("unregistered_watchers", :type => :list_optional, :values => values)
     end
     alias_method_chain :initialize_available_filters, :unregistered_watchers
