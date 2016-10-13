@@ -2,7 +2,7 @@
 
 #label_show_watchers {
     /* color: #666; */
-    width: 22%;
+    min-width: 175px;
     font-weight: bold;
     display: inline-block;
     /* vertical-align: super; */
