@@ -1,0 +1,14 @@
+<h2><%= link_to l(:label_history), unregistered_watchers_histories_path %> &#187; <%= l(:field_mail) %> #<%= @mail.id %></h2>
+
+<em class="info">
+  <%= format_time(@mail.created_at) %> :
+  <%= link_to_issue(@mail.issue) %> /
+  <%= @mail.issue_status %>
+</em>
+<div class='mail-content' style="margin-top: 15px;">
+  <code>
+    Sujet : <strong><%= h @mail.subject %></strong><br><br>
+    Destinataires : <strong><%= h @mail.to %></strong><br>
+    <%= raw(@mail.content) %>
+  </code>
+</div>

@@ -20,11 +20,21 @@ class Mailer < ActionMailer::Base
                     'Issue-Author' => issue.author.login
     @issue = issue
     @email_content = email_body_with_variables(issue, notif.email_body)
-    mail :to => unregistered_watchers,
-         :subject => "[#{issue.project.name}] #{issue.subject}" do |format|
+    subject = "[#{issue.project.name}] #{issue.subject}"
+    m = mail :to => unregistered_watchers,
+         :subject => subject do |format|
       format.text { render layout: 'mailer-unregistered-watchers' }
       format.html { render layout: 'mailer-unregistered-watchers' } unless Setting.plain_text_mail?
     end
+
+    if m
+      UnregisteredWatchersHistory.create(issue_status_id: notif.issue_status.id,
+                                         issue_id: issue.id,
+                                         content: @email_content,
+                                         to: unregistered_watchers.join(', '),
+                                         subject: subject)
+    end
+
   end
 
 end

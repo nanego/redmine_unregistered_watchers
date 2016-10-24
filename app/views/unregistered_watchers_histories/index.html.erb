@@ -1,0 +1,36 @@
+<div class=contextual>
+  <%= link_to unregistered_watchers_settings_path do %>
+    <span class="icon icon-changeset"></span>
+    <h4 style="display: table-cell;">Revenir à la configuration du plugin</h4>
+  <% end %>
+</div>
+<h2><%= l(:label_history) %></h2>
+
+<div class="autoscroll">
+  <table class="list mails">
+    <thead><tr>
+      <%= sort_header_tag('id', :caption => "#") %>
+      <th><%= l(:field_issue) %></th>
+      <%= sort_header_tag('subject', :caption => l(:field_mail)) %>
+      <%= sort_header_tag('created_at', :caption => l(:field_created_on), :default_order => 'desc') %>
+    </tr></thead>
+    <tbody>
+    <% @mails.each do |mail| %>
+      <tr class="unregistered_watchers_mails <%= cycle("odd", "even") %>">
+        <td class="id"><%= mail.id %></td>
+        <td class="issue">
+          <%= link_to_issue(mail.issue) %>
+        </td>
+        <td class="subject">
+          <%= link_to unregistered_watchers_history_path(mail), :class => "nostyle" do %>
+            <strong><%= h mail.subject %></strong><br>
+            <%= raw mail.content %>
+          <% end %>
+        </td>
+        <td class="created_at" align="center"><%= format_time(mail.created_at) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<span class="pagination"><% "pagination_links_full @mails_page, @mails_count" %></span>

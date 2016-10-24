@@ -32,5 +32,9 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
                          'unregistered_watchers_label' => "Notifier d'autres personnes",
                          'status' => []
                        },
-           :partial => 'settings/redmine_plugin_unregistered_watchers'
+           :partial => 'unregistered_watchers/settings'
+end
+
+Redmine::MenuManager.map :admin_menu do |menu|
+  menu.push :unregistered_watchers, {:controller => :unregistered_watchers, :action => :settings}, :caption => :field_unregistered_watchers
 end

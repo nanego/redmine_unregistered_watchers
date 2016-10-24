@@ -1,7 +1,14 @@
+<div class=contextual>
+  <%= link_to unregistered_watchers_histories_path do %>
+    <span class="icon icon-email"></span>
+    <h4 style="display: table-cell;">Voir l'historique des mails envoyés</h4>
+  <% end %>
+</div>
+<h2><%= l(:label_settings) %></h2>
 <table>
   <tbody>
-    <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %> :</th>
-    <% IssueStatus.all.each do |status| %>
+  <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %> :</th>
+  <% IssueStatus.all.each do |status| %>
     <tr>
       <td>
         <%= status.name %> :
@@ -11,7 +18,7 @@
         <%= wikitoolbar_for "settings_status_default_messages_#{status.id}" %>
       </td>
     </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

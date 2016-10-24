@@ -1,6 +1,8 @@
 class UnregisteredWatchersController < ApplicationController
 
-  before_filter :find_project
+  before_filter :find_project, :only => [:update_status_notifications_per_project]
+  before_filter :require_admin, :only => [:settings]
+  layout "admin"
 
   def update_status_notifications_per_project
     @notifications = []
@@ -14,6 +16,9 @@ class UnregisteredWatchersController < ApplicationController
     end
     @project.unregistered_watchers_notifications = @notifications
     redirect_to settings_project_path(@project, :tab => :unregistered_watchers)
+  end
+
+  def settings
   end
 
   private
