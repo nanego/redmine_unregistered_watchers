@@ -15,7 +15,6 @@
       </td>
       <td>
         <%= text_area_tag "settings[status][#{status.id}]", Setting['plugin_redmine_unregistered_watchers']['status'].present? ? Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s] : "", :id => "settings_status_default_messages_#{status.id}", :class => 'wiki-edit', :size => '72x4' %>
-        <%= wikitoolbar_for "settings_status_default_messages_#{status.id}" %>
       </td>
     </tr>
   <% end %>

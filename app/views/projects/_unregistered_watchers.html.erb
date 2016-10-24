@@ -30,7 +30,6 @@
                    current_text = Setting['plugin_redmine_unregistered_watchers']['status'].blank? ? "" : Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s]
                  end %>
               <%= text_area_tag 'notifications[emails]['+status.id.to_s+']', current_text, rows: 5, cols: 150 %>
-              <%= wikitoolbar_for 'notifications_emails_'+status.id.to_s %>
             </td>
           </tr>
         <% end; reset_cycle %>
