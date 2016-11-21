@@ -19,7 +19,7 @@
       <tr class="unregistered_watchers_mails <%= cycle("odd", "even") %>">
         <td class="id"><%= mail.id %></td>
         <td class="issue">
-          <%= link_to_issue(mail.issue) %>
+          <%= mail.issue.present? ? link_to_issue(mail.issue) : "##{mail.issue_id}" %>
         </td>
         <td class="subject">
           <%= link_to unregistered_watchers_history_path(mail), :class => "nostyle" do %>

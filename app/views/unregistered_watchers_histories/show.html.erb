@@ -2,7 +2,7 @@
 
 <em class="info">
   <%= format_time(@mail.created_at) %> :
-  <%= link_to_issue(@mail.issue) %> /
+  <%= @mail.issue.present? ? link_to_issue(@mail.issue) : "##{@mail.issue_id}" %> /
   <%= @mail.issue_status %>
 </em>
 <div class='mail-content' style="margin-top: 15px;">
