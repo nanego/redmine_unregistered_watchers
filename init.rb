@@ -10,6 +10,7 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'redmine_unregistered_watchers/project_patch'
   require_dependency 'redmine_unregistered_watchers/projects_helper_patch'
   require_dependency 'redmine_unregistered_watchers/journal_patch'
+  require_dependency 'redmine_unregistered_watchers/journals_helper_patch'
   require_dependency 'redmine_unregistered_watchers/mailer_patch'
   require_dependency 'redmine_unregistered_watchers/queries_helper_patch'
 end

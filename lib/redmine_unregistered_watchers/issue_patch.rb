@@ -7,6 +7,7 @@ class Issue < ActiveRecord::Base
   unloadable # Send unloadable so it will not be unloaded in development
 
   has_many :unregistered_watchers
+  has_many :unregistered_watchers_histories
 
   safe_attributes 'notif_sent_to_unreg_watchers'
 

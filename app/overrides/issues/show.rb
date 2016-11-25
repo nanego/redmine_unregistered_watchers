@@ -3,3 +3,16 @@ Deface::Override.new :virtual_path => 'issues/show',
                      :name         => 'show-unregistered-watchers-in-issue-description',
                      :insert_after => '.attributes',
                      :partial         => 'issues/show_watchers'
+
+Deface::Override.new :virtual_path  => 'issues/show',
+                     :name          => 'reorder-journals-in-show-issue',
+                     :insert_before => 'h2',
+                     :text          => <<EOS
+<%
+  @issue.unregistered_watchers_histories.each do |mail|
+    @journals << Journal.new(:journalized => @issue, :user => nil, :notes => mail.content, :private_notes => false, :created_on => mail.created_at)
+  end
+  @journals.sort_by!(&:created_on)
+  @journals.reverse! if User.current.wants_comments_in_reverse_order?
+%>
+EOS
