@@ -16,8 +16,11 @@ Deface::Override.new :virtual_path  => 'issues/_history',
 <% if journal.id.present? %>
   <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
 <% else %>
-  <%= "Mail envoyé au demandeur il y a "%>
+  <%= "Mail automatique envoyé au demandeur il y a "%>
   <%= time_tag(journal.created_on).html_safe %>
+  <% mail_id = "journal-"+journal.object_id.to_s+"-notes" %>
+  <% link_id = "link-to-mail-notification-"+journal.object_id.to_s %>
+  <%= content_tag(:span, id: link_id) { ('(' + content_tag(:a, 'Voir le contenu du mail', :href => "#", :onclick => "$('#"+mail_id+"').show();$('#"+link_id+"').hide();return false;") + ')').html_safe } %>
 <% end %>
 EOS
 
@@ -26,7 +29,7 @@ Deface::Override.new :virtual_path  => 'issues/_history',
                      :surround      => "div:contains(id, 'change-')",
                      :text          => <<-EOS
 <% if journal.id.nil? %>
-  <div class='issue-mail-notification-container'>
+  <div class='issue-mail-notification-container' id='mail-notification-<%= journal.object_id %>'>
   <%= render_original %>
   </div>
 <% else %>

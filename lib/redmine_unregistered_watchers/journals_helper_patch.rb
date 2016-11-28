@@ -16,6 +16,6 @@ module JournalsHelper
     content << content_tag('div', links.join(' ').html_safe, :class => 'contextual') unless links.empty?
     content << content_tag('div', simple_format(journal.notes), :class => 'content')
     css_classes = "wiki unregistered_watchers_history"
-    content_tag('div', content.html_safe, :id => "journal-#{journal.id}-notes", :class => css_classes)
+    content_tag('div', content.html_safe, :id => "journal-#{journal.object_id}-notes", :class => css_classes, style: 'display:none;')
   end
 end
