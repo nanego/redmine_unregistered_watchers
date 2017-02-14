@@ -1,5 +1,7 @@
 .icon-x-close { background-image: url(../../../images/close.png); margin-left:4px; margin-right:2px; }
 
+.icon-unregistered-watchers, #admin-menu a.unregistered-watchers { background-image: url(../images/mailic.png); }
+
 #label_show_watchers {
     /* color: #666; */
     min-width: 175px;
