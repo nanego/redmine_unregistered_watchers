@@ -117,22 +117,23 @@ describe IssuesController, type: :controller do
     end
     expect(ActionMailer::Base.deliveries.size).to eq 2
 
-    default_mail = ActionMailer::Base.deliveries.first
-    expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
-    expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
-    expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
+    default_mail = ActionMailer::Base.deliveries.second
+    unregistered_watchers_email = ActionMailer::Base.deliveries.first
+
+    expect(default_mail['bcc'].to_s).to include User.find(2).mail
+    expect(default_mail['bcc'].to_s).to_not include "captain@example.com"
+    expect(default_mail['bcc'].to_s).to_not include "boss@email.com"
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include "has been updated by"
       expect(part.body.raw_source).to_not include content
     end
 
-    unregistered_watchers_email = ActionMailer::Base.deliveries.second
-    expect(!unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail))
-    expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
-    expect(!unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
+    expect(unregistered_watchers_email['bcc'].to_s).to_not include User.find(2).mail
+    expect(unregistered_watchers_email['bcc'].to_s).to include "captain@example.com"
+    expect(unregistered_watchers_email['bcc'].to_s).to_not include "boss@email.com"
     unregistered_watchers_email.parts.each do |part|
-      expect(part.body.raw_source).to_not include("has been updated by")
-      expect(part.body.raw_source).to include(content)
+      expect(part.body.raw_source).to_not include "has been updated by"
+      expect(part.body.raw_source).to include content
     end
   end
 
