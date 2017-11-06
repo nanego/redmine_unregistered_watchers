@@ -19,6 +19,7 @@ class UnregisteredWatchersController < ApplicationController
   end
 
   def settings
+    redirect_to plugin_settings_path 'redmine_unregistered_watchers'
   end
 
   private

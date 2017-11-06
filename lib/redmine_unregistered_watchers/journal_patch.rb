@@ -7,8 +7,8 @@ class Journal < ActiveRecord::Base
   def send_notification_to_unregistered_watchers
     updated_issue = self.journalized.reload
     if updated_issue.is_a?(Issue) && updated_issue.project.module_enabled?("unregistered_watchers")
-      issue_notif = self.issue.project.unregistered_watchers_notifications.find_by_issue_status_id(self.issue.status_id)
-      if issue_notif.present? && (Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending']=='false' || self.issue.notif_sent_to_unreg_watchers)
+      issue_notif = updated_issue.project.unregistered_watchers_notifications.find_by_issue_status_id(updated_issue.status_id)
+      if updated_issue.notify_unreg_watchers?(issue_notif)
         Mailer.deliver_issue_to_unregistered_watchers(updated_issue, issue_notif)
       end
     end
