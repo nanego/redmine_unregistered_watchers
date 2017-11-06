@@ -31,7 +31,7 @@ class Issue < ActiveRecord::Base
     return false unless (Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending']=='false' || notif_sent_to_unreg_watchers)
     # Do not send message if the exact same has already been sent
     last_notif = self.unregistered_watchers_histories.last
-    if last_notif.present? && last_notif.content == message.email_body
+    if last_notif.present? && last_notif.content == Mailer.email_body_with_variables(self, message.email_body)
       return false
     else
       return true
