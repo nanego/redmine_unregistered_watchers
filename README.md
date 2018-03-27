@@ -23,6 +23,10 @@ Installation
 
 This plugin has been tested with Redmine 2.5.0+.
 
+Requirements:
+
+    ruby >= 2.1.0
+
 Please apply general instructions for plugins [here](http://www.redmine.org/wiki/redmine/Plugins).
 
 Note that this plugin now depends on these other plugins:

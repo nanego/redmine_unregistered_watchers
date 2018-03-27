@@ -13,7 +13,8 @@ describe IssuesController, type: :controller do
            :members,
            :member_roles,
            :issue_statuses,
-           :email_addresses
+           :email_addresses,
+           :issues
 
   it "should send a notification to unregistered watchers after create" do
     ActionMailer::Base.deliveries.clear
