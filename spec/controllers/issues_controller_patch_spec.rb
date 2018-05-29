@@ -7,21 +7,39 @@ describe IssuesController, type: :controller do
   render_views
   include ActiveSupport::Testing::Assertions
 
-  fixtures :projects,
-           :users,
+  fixtures :unregistered_watchers,
+           :unregistered_watchers_notifications,
+           :users, :email_addresses, :user_preferences,
            :roles,
            :members,
            :member_roles,
+           :issues,
            :issue_statuses,
-           :email_addresses,
-           :issues
+           :issue_relations,
+           :versions,
+           :trackers,
+           :projects_trackers,
+           :issue_categories,
+           :enabled_modules,
+           :enumerations,
+           :attachments,
+           :workflows,
+           :custom_fields,
+           :custom_values,
+           :custom_fields_projects,
+           :custom_fields_trackers,
+           :time_entries,
+           :journals,
+           :journal_details,
+           :queries,
+           :repositories,
+           :changesets
 
   it "should send a notification to unregistered watchers after create" do
     ActionMailer::Base.deliveries.clear
     @request.session[:user_id] = 2
 
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
-    UnregisteredWatchersNotification.create!(:issue_status_id => 2, :project_id => 1, :email_body => "Email body content")
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Issue.count' do
@@ -35,6 +53,7 @@ describe IssuesController, type: :controller do
                         :notif_sent_to_unreg_watchers => true,
                         :custom_field_values => {'2' => 'Value for field 2'}}
       end
+
     end
 
     expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
@@ -65,7 +84,6 @@ describe IssuesController, type: :controller do
     @request.session[:user_id] = 2
 
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
-    UnregisteredWatchersNotification.create!(:issue_status_id => 2, :project_id => 1, :email_body => "Email body content")
 
     assert_difference 'ActionMailer::Base.deliveries.size', 1 do
       assert_difference 'Issue.count' do
@@ -103,14 +121,13 @@ describe IssuesController, type: :controller do
     content = "Custom body: the issue has been closed !"
 
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
-    UnregisteredWatcher.create!(issue_id: 1, email: "captain@example.com")
     UnregisteredWatchersNotification.create!(:issue_status_id => 5, :project_id => 1, :email_body => content)
 
     old_subject = issue.subject
     new_subject = 'Subject modified by IssuesControllerTest#test_post_edit'
     assert_difference 'Journal.count' do
       assert_difference('JournalDetail.count', 3) do
-        put :update, :id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com"],
+        put :update, :id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com", "msjoe@example.com", "mrjohn@example.com"],
                                           :notif_sent_to_unreg_watchers => true,
                                           :status_id => '5' # close issue
         }
@@ -152,7 +169,7 @@ describe IssuesController, type: :controller do
     old_subject = issue.subject
     new_subject = 'Subject modified by IssuesControllerTest#test_post_edit'
     assert_difference 'Journal.count' do
-      assert_difference('JournalDetail.count', 2) do
+      assert_difference('JournalDetail.count', 3) do
         put :update, :id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com"],
                                           :notif_sent_to_unreg_watchers => false,
                                           :status_id => '5' # close issue

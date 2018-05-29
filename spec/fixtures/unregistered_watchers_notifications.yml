@@ -1,0 +1,8 @@
+one:
+  issue_status_id: 1
+  project_id: 1
+  email_body: "Email body content"
+two:
+  issue_status_id: 2
+  project_id: 1
+  email_body: "Email body content"
