@@ -1,17 +1,19 @@
 require_dependency 'issue_query'
 
-class IssueQuery < Query
-
-  self.available_columns << QueryColumn.new(:unregistered_watchers, groupable: false, :sortable => false)
-
-  unless instance_methods.include?(:initialize_available_filters_with_unregistered_watchers)
-    def initialize_available_filters_with_unregistered_watchers
-      initialize_available_filters_without_unregistered_watchers
+module PluginUnregisteredWatchers
+  module IssueQueryPatch
+    def initialize_available_filters
+      super
       values = UnregisteredWatcher.order('LOWER(email)').map(&:email).compact.uniq
       add_available_filter("unregistered_watchers", :type => :list_optional, :values => values)
     end
-    alias_method_chain :initialize_available_filters, :unregistered_watchers
   end
+end
+
+class IssueQuery < Query
+  prepend PluginUnregisteredWatchers::IssueQueryPatch
+
+  self.available_columns << QueryColumn.new(:unregistered_watchers, groupable: false, :sortable => false)
 
   def sql_for_unregistered_watchers_field(field, operator, value)
     case operator

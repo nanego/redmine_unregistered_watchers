@@ -1,11 +1,12 @@
 require_dependency 'issues_helper'
 
-module IssuesHelper
-  unless instance_methods.include?(:show_detail_with_unregistered_watchers)
+module PluginUnregisteredWatchers
+  module IssuesHelper
+
     # Returns the textual representation of a single journal detail
     # Core properties are 'attr', 'attachment' or 'cf' : this patch specify how to display 'unregistered_watchers' journal details
     # 'unregistered_watchers' property is introduced by this plugin
-    def show_detail_with_unregistered_watchers(detail, no_html=false, options={})
+    def show_detail(detail, no_html = false, options = {})
 
       # Process custom 'unregistered_watchers' property
       if detail.property == 'unregistered_watchers'
@@ -22,7 +23,7 @@ module IssuesHelper
             value.join(', ')
           else
             details = "(#{list})"
-            "#{value.size} #{value.size>1 ? l(:text_journal_unregistered_watchers_added) : l(:text_journal_unregistered_watcher_added)} #{details}".html_safe
+            "#{value.size} #{value.size > 1 ? l(:text_journal_unregistered_watchers_added) : l(:text_journal_unregistered_watcher_added)} #{details}".html_safe
           end
 
         elsif old_value.present? # unregistered_watchers removed from the issue
@@ -34,17 +35,20 @@ module IssuesHelper
             old_value.join(', ')
           else
             details = "(#{list})" unless no_html
-            "#{old_value.size} #{old_value.size>1 ? l(:text_journal_unregistered_watchers_deleted) : l(:text_journal_unregistered_watcher_deleted)} #{details}".html_safe
+            "#{old_value.size} #{old_value.size > 1 ? l(:text_journal_unregistered_watchers_deleted) : l(:text_journal_unregistered_watcher_deleted)} #{details}".html_safe
           end
 
         end
 
       else
         # Process standard properties like 'attr', 'attachment' or 'cf'
-        show_detail_without_unregistered_watchers(detail, no_html, options)
+        super
       end
 
     end
-    alias_method_chain :show_detail, :unregistered_watchers
+
   end
 end
+
+IssuesHelper.prepend PluginUnregisteredWatchers::IssuesHelper
+ActionView::Base.prepend IssuesHelper

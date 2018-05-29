@@ -1,17 +1,20 @@
 require_dependency 'queries_helper'
 
-module QueriesHelper
-  include IssuesHelper
+module PluginUnregisteredWatchers
+  module QueriesHelperPatch
 
-  unless instance_methods.include?(:column_value_with_unregistered_watchers)
-    def column_value_with_unregistered_watchers(column, issue, values)
+    def column_value(column, issue, values)
       if column.name == :unregistered_watchers && values.kind_of?(ActiveRecord::Associations::CollectionProxy)
         values.to_a.map(&:email).compact.uniq.join(", ")
       else
-        column_value_without_unregistered_watchers(column, issue, values)
+        super
       end
     end
-    alias_method_chain :column_value, :unregistered_watchers
-  end
 
+  end
 end
+
+QueriesHelper.include IssuesHelper
+QueriesHelper.prepend PluginUnregisteredWatchers::QueriesHelperPatch
+ActionView::Base.prepend QueriesHelper
+IssuesController.prepend QueriesHelper
