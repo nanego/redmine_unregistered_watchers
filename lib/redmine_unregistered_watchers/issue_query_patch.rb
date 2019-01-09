@@ -4,7 +4,7 @@ module PluginUnregisteredWatchers
   module IssueQueryPatch
     def initialize_available_filters
       super
-      values = UnregisteredWatcher.order('LOWER(email)').map(&:email).compact.uniq
+      values = UnregisteredWatcher.order(Arel.sql('LOWER(email)')).map(&:email).compact.uniq
       add_available_filter("unregistered_watchers", :type => :list_optional, :values => values)
     end
   end
@@ -13,7 +13,7 @@ end
 class IssueQuery < Query
   prepend PluginUnregisteredWatchers::IssueQueryPatch
 
-  self.available_columns << QueryColumn.new(:unregistered_watchers, groupable: false, :sortable => false)
+  self.available_columns << QueryColumn.new(:unregistered_watchers, groupable: false)
 
   def sql_for_unregistered_watchers_field(field, operator, value)
     case operator

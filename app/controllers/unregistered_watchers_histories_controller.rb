@@ -1,6 +1,6 @@
 class UnregisteredWatchersHistoriesController < ApplicationController
 
-  before_filter :require_admin
+  before_action :require_admin
   layout "admin"
 
   helper :sort

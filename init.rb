@@ -1,7 +1,7 @@
 require 'redmine'
 require_dependency 'redmine_unregistered_watchers/hooks'
 
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   require_dependency 'redmine_unregistered_watchers/issue_patch'
   require_dependency 'redmine_unregistered_watchers/issue_statuses_patch'
   require_dependency 'redmine_unregistered_watchers/issue_query_patch'

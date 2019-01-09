@@ -1,6 +1,8 @@
 class UnregisteredWatcher < ActiveRecord::Base
+  include Redmine::SafeAttributes
+
   belongs_to :issue
-  attr_accessible :email, :issue_id
+  safe_attributes :email, :issue_id
 
   def to_s
     self.email

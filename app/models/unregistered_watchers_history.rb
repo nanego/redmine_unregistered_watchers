@@ -1,5 +1,8 @@
 class UnregisteredWatchersHistory < ActiveRecord::Base
+  include Redmine::SafeAttributes
+
   belongs_to :issue
   belongs_to :issue_status
-  attr_accessible :issue_status_id, :issue_id, :content, :to, :subject
+
+  safe_attributes :issue_status_id, :issue_id, :content, :to, :subject
 end

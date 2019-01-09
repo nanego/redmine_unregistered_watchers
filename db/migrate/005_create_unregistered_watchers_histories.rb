@@ -1,4 +1,4 @@
-class CreateUnregisteredWatchersHistories < ActiveRecord::Migration
+class CreateUnregisteredWatchersHistories < ActiveRecord::Migration[4.2]
   def self.up
     create_table :unregistered_watchers_histories do |t|
       t.references :issue_status

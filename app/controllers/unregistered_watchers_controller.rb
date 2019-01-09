@@ -1,7 +1,7 @@
 class UnregisteredWatchersController < ApplicationController
 
-  before_filter :find_project, :only => [:update_status_notifications_per_project]
-  before_filter :require_admin, :only => [:settings]
+  before_action :find_project, :only => [:update_status_notifications_per_project]
+  before_action :require_admin, :only => [:settings]
   layout "admin"
 
   def update_status_notifications_per_project

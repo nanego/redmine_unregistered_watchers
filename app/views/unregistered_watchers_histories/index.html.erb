@@ -16,7 +16,7 @@
     </tr></thead>
     <tbody>
     <% @mails.each do |mail| %>
-      <tr class="unregistered_watchers_mails <%= cycle("odd", "even") %>">
+      <tr class="unregistered_watchers_mails">
         <td class="id"><%= mail.id %></td>
         <td class="issue">
           <%= mail.issue.present? ? link_to_issue(mail.issue) : "##{mail.issue_id}" %>

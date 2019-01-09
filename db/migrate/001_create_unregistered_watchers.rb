@@ -1,4 +1,4 @@
-class CreateUnregisteredWatchers < ActiveRecord::Migration
+class CreateUnregisteredWatchers < ActiveRecord::Migration[4.2]
   def self.up
     create_table :unregistered_watchers do |t|
       t.column :issue_id, :integer

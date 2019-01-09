@@ -26,6 +26,7 @@ EOS
 
 Deface::Override.new :virtual_path  => 'issues/_history',
                      :name          => 'add-container-to-mail-notifications',
+                     :original      => '68e145deae6a29591c73e2ca568cbac07e2fdbd0',
                      :surround      => "div:contains(id, 'change-')",
                      :text          => <<-EOS
 <% if journal.id.nil? %>

@@ -1,4 +1,4 @@
-class CreateUnregisteredWatchersNotifications < ActiveRecord::Migration
+class CreateUnregisteredWatchersNotifications < ActiveRecord::Migration[4.2]
   def self.up
     create_table :unregistered_watchers_notifications do |t|
       t.references :issue_status
