@@ -45,7 +45,7 @@ describe "IssuesHelperPatch" do
   it "should IssuesHelper#show_detail with html should show a deleted unregistered watcher with HTML highlights" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => 'captain@example.com', :value => nil, :prop_key => nil)
     html = show_detail(detail, false)
-    expect(html).to include("1 unregistered watcher has been removed (<del class=\"journal_details\" data-detail-id=\"null\">captain@example.com</del>)")
+    expect(html).to include("1 unregistered watcher has been removed (<del class=\"journal_details\">captain@example.com</del>)")
   end
 
   it "should IssuesHelper#show_detail with html should show all new unregistered watchers with HTML highlights" do
@@ -59,7 +59,7 @@ describe "IssuesHelperPatch" do
   it "should IssuesHelper#show_detail with html should show all deleted unregistered watchers with HTML highlights" do
     detail = JournalDetail.new(:property => 'unregistered_watchers', :old_value => 'captain@example.com,moos@example.com', :value => nil, :prop_key => nil)
     result = show_detail(detail, false)
-    html = "2 unregistered watchers have been removed (<del class=\"journal_details\" data-detail-id=\"null\">captain@example.com, moos@example.com</del>)"
+    html = "2 unregistered watchers have been removed (<del class=\"journal_details\">captain@example.com, moos@example.com</del>)"
     expect(result).to include(html)
   end
 

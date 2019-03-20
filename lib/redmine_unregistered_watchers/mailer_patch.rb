@@ -10,11 +10,11 @@ class Mailer < ActionMailer::Base
     else
       to = issue.unregistered_watchers.map(&:email)
     end
-    Mailer.issue_to_unregistered_watchers(issue, to, notif).deliver
+    issue_to_unregistered_watchers(User.new, to, issue, notif).deliver_now
   end
 
   # Builds a mail for notifying unregistered watchers about a new or an updated issue
-  def issue_to_unregistered_watchers(issue, unregistered_watchers, notif)
+  def issue_to_unregistered_watchers(empty_user, unregistered_watchers, issue, notif)
     unregistered_watchers = Array.wrap(unregistered_watchers) #ensure we get an array
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,

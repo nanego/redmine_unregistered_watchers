@@ -34,7 +34,7 @@ module PluginUnregisteredWatchers
           if no_html
             old_value.join(', ')
           else
-            details = "(#{list})" unless no_html
+            details = "(#{list})"
             "#{old_value.size} #{old_value.size > 1 ? l(:text_journal_unregistered_watchers_deleted) : l(:text_journal_unregistered_watcher_deleted)} #{details}".html_safe
           end
 

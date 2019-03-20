@@ -41,7 +41,7 @@ describe IssuesController, type: :controller do
 
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 3 do
       assert_difference 'Issue.count' do
         post :create, params: {:project_id => 1,
                                :issue => {:tracker_id => 3,
@@ -58,9 +58,9 @@ describe IssuesController, type: :controller do
 
     expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
-    expect(ActionMailer::Base.deliveries.size).to eq 2
+    expect(ActionMailer::Base.deliveries.size).to eq 3
 
-    default_mail = ActionMailer::Base.deliveries.first
+    default_mail = ActionMailer::Base.deliveries.second
     expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
     expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
     expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
@@ -69,7 +69,7 @@ describe IssuesController, type: :controller do
       expect(part.body.raw_source).to_not include("Email body content")
     end
 
-    unregistered_watchers_email = ActionMailer::Base.deliveries.second
+    unregistered_watchers_email = ActionMailer::Base.deliveries.first
     expect(!unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail))
     expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
     expect(unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
@@ -85,7 +85,7 @@ describe IssuesController, type: :controller do
 
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Issue.count' do
         post :create, params: {:project_id => 1,
                                :issue => {:tracker_id => 3,
@@ -101,7 +101,7 @@ describe IssuesController, type: :controller do
 
     expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
-    expect(ActionMailer::Base.deliveries.size).to eq 1 # Only default notification to REGISTERED watchers
+    expect(ActionMailer::Base.deliveries.size).to eq 2 # Only default notification to REGISTERED watchers
     default_mail = ActionMailer::Base.deliveries.first
     expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
     expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
@@ -133,7 +133,7 @@ describe IssuesController, type: :controller do
         }}
       end
     end
-    expect(ActionMailer::Base.deliveries.size).to eq 2
+    expect(ActionMailer::Base.deliveries.size).to eq 3
 
     default_mail = ActionMailer::Base.deliveries.second
     unregistered_watchers_email = ActionMailer::Base.deliveries.first
@@ -176,7 +176,7 @@ describe IssuesController, type: :controller do
         }}
       end
     end
-    expect(ActionMailer::Base.deliveries.size).to eq 1 # Only default notification to REGISTERED watchers
+    expect(ActionMailer::Base.deliveries.size).to eq 2 # Only default notification to REGISTERED watchers
     default_mail = ActionMailer::Base.deliveries.first
     expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
     expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
