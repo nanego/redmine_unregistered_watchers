@@ -11,6 +11,7 @@ en:
   field_message: "Message sent"
   watcher_custom_field: "Custom field for unregistered watchers"
   watcher_custom_field_hint: "(if no specific custom field, a text field will be added automatically)"
+  workflow_from_custom_field: "Give the automatically added field the same workflow than this custom field has"
   settings_allow_user_to_choose_if_email_will_be_sent: "Allow the user to choose if message is sent or not, without changing the status"
   unregistered_watchers_label: "Textfield label"
   field_notif_sent_to_unreg_watchers: "Send a notification by email to the watchers"

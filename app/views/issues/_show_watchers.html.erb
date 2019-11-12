@@ -1,7 +1,17 @@
 <% if @issue.project.module_enabled?("unregistered_watchers") && Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].blank? && @issue.unregistered_watchers.present? %>
-  <hr>
-  <div id="current_unregistered_watchers_list" style="display: flex;">
-    <span id="label_show_watchers"><%= Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %></span>
-    <span> <%= @issue.unregistered_watchers.map(&:email).join(', ') %>  </span>
-  </div>
+
+  <% if Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id'].present?
+       workflow_from_custom_field = CustomField.find(Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id'])
+     end %>
+
+  <% if workflow_from_custom_field.blank? || @issue.visible_custom_fields(User.current).include?(workflow_from_custom_field) %>
+
+    <hr>
+    <div id="current_unregistered_watchers_list" style="display: flex;">
+      <span id="label_show_watchers"><%= Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %></span>
+      <span> <%= @issue.unregistered_watchers.map(&:email).join(', ') %>  </span>
+    </div>
+    
+  <% end %>
+
 <% end %>

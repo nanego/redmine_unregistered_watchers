@@ -11,6 +11,7 @@ fr:
   field_message: "Message à envoyer"
   watcher_custom_field: "Champs personnalisé correspondant aux observateurs non-inscrits"
   watcher_custom_field_hint: "(si aucun champ n'est sélectionné, un champ de saisie sera ajouté automatiquement)"
+  workflow_from_custom_field: "Donner au champ de saisie le même workflow que celui de ce champ personnalisé"
   settings_allow_user_to_choose_if_email_will_be_sent: "Permettre à l'utilisateur de choisir s'il faut envoyer un mail au demandeur ou non"
   unregistered_watchers_label: "Libellé du champ ajouté automatiquement"
   field_notif_sent_to_unreg_watchers: "Envoyer une notification par email au demandeur "

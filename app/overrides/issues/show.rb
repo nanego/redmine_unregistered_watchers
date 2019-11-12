@@ -5,7 +5,7 @@ Deface::Override.new :virtual_path => 'issues/show',
                      :partial         => 'issues/show_watchers'
 
 Deface::Override.new :virtual_path  => 'issues/show',
-                     :name          => 'reorder-journals-in-show-issue',
+                     :name          => 'add-unregistered-watchers-histories-to-journals',
                      :insert_before => 'h2',
                      :text          => <<EOS
 <%

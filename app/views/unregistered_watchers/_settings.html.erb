@@ -36,6 +36,12 @@
   <span>
     <%= text_field_tag "settings[unregistered_watchers_label]", Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %>
   </span>
+  <div>
+    <span colspan="2" style="text-align: left;"><%= l(:workflow_from_custom_field) %> :</span>
+    <span>
+      <%= select_tag "settings[workflow_from_custom_field_id]", options_for_select(IssueCustomField.all.collect{ |u| [u.name, u.id] }, Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id']), {include_blank: true, id: "settings_workflow_from_custom_field_id"} %>
+    </span>
+  </div>
 </div>
 
 

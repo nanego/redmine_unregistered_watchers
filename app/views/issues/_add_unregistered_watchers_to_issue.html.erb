@@ -1,66 +1,74 @@
 <% if @issue.project.module_enabled?("unregistered_watchers") && Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].blank? %>
 
-  <p id=issues_notify_unregistered_watchers>
-    <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
-    <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
-    <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {label: Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label']}, {:multiple => true} %>
-  </p>
+  <% if Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id'].present?
+       workflow_from_custom_field = CustomField.find(Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id'])
+     end %>
 
-  <script>
+  <% if workflow_from_custom_field.blank? || @issue.editable_custom_fields(User.current).include?(workflow_from_custom_field) %>
 
-    var data = [];
-    <% current_unregistered_watchers.each do |watcher_email| %>
-      data.push({ id: '<%= watcher_email %>', text: '<%= watcher_email %>' });
-    <% end %>
-    $("#issue_unregistered_watchers").select2({
-      containerCss: {width: '300px', minwidth: '300px'},
-      width: 'style',
-      tags: true,
-      data: data,
-      tokenSeparators: [',', ' '],
-      language: {
-        noResults: function() {
-          return "Entrez une adresse email valide";
+    <p id=issues_notify_unregistered_watchers>
+      <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
+      <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
+      <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {label: Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label']}, {:multiple => true} %>
+    </p>
+
+    <script>
+
+        var data = [];
+        <% current_unregistered_watchers.each do |watcher_email| %>
+        data.push({id: '<%= watcher_email %>', text: '<%= watcher_email %>'});
+        <% end %>
+        $("#issue_unregistered_watchers").select2({
+            containerCss: {width: '300px', minwidth: '300px'},
+            width: 'style',
+            tags: true,
+            data: data,
+            tokenSeparators: [',', ' '],
+            language: {
+                noResults: function () {
+                    return "Entrez une adresse email valide";
+                }
+            },
+            createTag: function (query) {
+                if (query.term != undefined && validateEmail(query.term)) {
+                    return {
+                        id: query.term,
+                        text: query.term,
+                        tag: true
+                    }
+                } else {
+                    return null;
+                }
+            },
+            ajax: {
+                url: "/ldap_minequip/search.json?key=<%= User.current.api_key %>",
+                dataType: 'json',
+                delay: 250,
+                method: 'GET',
+                data: function (params) {
+                    return {
+                        mail: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    console.log(data.results);
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            },
+            minimumInputLenght: 3
+        });
+
+        function validateEmail(email) {
+            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return re.test(email);
         }
-      },
-      createTag: function (query) {
-        if(query.term != undefined && validateEmail(query.term)) {
-          return {
-            id: query.term,
-            text: query.term,
-            tag: true
-          }
-        } else {
-          return null;
-        }
-      },
-      ajax: {
-        url: "/ldap_minequip/search.json?key=<%= User.current.api_key %>",
-        dataType: 'json',
-        delay: 250,
-        method:'GET',
-        data: function (params) {
-          return {
-            mail: params.term
-          };
-        },
-        processResults: function (data, params) {
-          params.page = params.page || 1;
-          console.log(data.results);
-          return {
-            results: data.results
-          };
-        },
-        cache: true
-      },
-      minimumInputLenght:3
-    });
 
-    function validateEmail(email) {
-      var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-      return re.test(email);
-    }
+    </script>
 
-  </script>
+  <% end %>
 
 <% end %>
