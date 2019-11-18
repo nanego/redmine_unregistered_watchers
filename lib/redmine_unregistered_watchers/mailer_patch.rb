@@ -28,7 +28,7 @@ class Mailer < ActionMailer::Base
       format.html { render layout: 'mailer-unregistered-watchers' } unless Setting.plain_text_mail?
     end
 
-    if m
+    if unregistered_watchers.present?
       UnregisteredWatchersHistory.create(issue_status_id: notif.issue_status.id,
                                          issue_id: issue.id,
                                          content: @email_content,

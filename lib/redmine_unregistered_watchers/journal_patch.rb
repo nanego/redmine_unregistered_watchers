@@ -2,6 +2,8 @@ require_dependency 'journal'
 
 class Journal < ActiveRecord::Base
 
+  attr_accessor :recipients
+
   after_create :send_notification_to_unregistered_watchers
 
   def send_notification_to_unregistered_watchers
