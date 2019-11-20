@@ -19,7 +19,7 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
   name 'Redmine Unregistered Watchers plugin'
   author 'Vincent ROBERT'
   author_url 'mailto:contact@vincent-robert.com'
-  description 'This plugin for Redmine make it possible to notify unregistered users by email when particular events occur on issues.'
+  description 'This Redmine plugin allows us to notify unregistered users by mail when particular events occur on issues.'
   version '1.0.0'
   url 'https://github.com/nanego/redmine_unregistered_watchers'
   requires_redmine_plugin :redmine_base_rspec, :version_or_higher => '0.0.3' if Rails.env.test?

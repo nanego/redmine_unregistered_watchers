@@ -67,6 +67,12 @@
             return re.test(email);
         }
 
+        <% if workflow_from_custom_field.present? %>
+            $(document).ready(function () {
+                $('input#issue_custom_field_values_<%= workflow_from_custom_field.id %>').closest('p').css('display', 'none');
+            });
+        <% end %>
+
     </script>
 
   <% end %>

@@ -11,7 +11,15 @@
       <span id="label_show_watchers"><%= Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %></span>
       <span> <%= @issue.unregistered_watchers.map(&:email).join(', ') %>  </span>
     </div>
-    
+
+    <% if workflow_from_custom_field.present? %>
+      <%= javascript_tag do %>
+        $(document).ready(function () {
+            $('.attribute.cf_<%= workflow_from_custom_field.id %>').css('display', 'none');
+        });
+      <% end %>
+    <% end %>
+
   <% end %>
 
 <% end %>
