@@ -5,6 +5,47 @@
   <% end %>
 </div>
 <h2><%= l(:label_settings) %></h2>
+
+<div>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:watcher_custom_field_title) %></span>
+  <div>
+    <span colspan="2" style="text-align: left;"><%= l(:unregistered_watchers_label) %> :</span>
+    <span>
+    <%= text_field_tag "settings[unregistered_watchers_label]", Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %>
+  </span>
+  </div>
+  <div>
+    <span colspan="2" style="text-align: left;"><%= l(:workflow_from_custom_field) %> :</span>
+    <span>
+      <%= select_tag "settings[workflow_from_custom_field_id]", options_for_select(IssueCustomField.all.collect {|u| [u.name, u.id]}, Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id']), {include_blank: true, id: "settings_workflow_from_custom_field_id"} %>
+    </span>
+  </div>
+
+  <br>
+
+  <div>
+    <span colspan="2" style="text-align: left;"><%= l(:watcher_custom_field).html_safe %></span>
+    <span>
+      <%= select_tag "settings[watcher_custom_field_id]", options_for_select(IssueCustomField.all.collect {|u| [u.name, u.id]}, Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id']), {include_blank: true, id: "settings_watcher_custom_field_id"} %>
+    </span>
+  </div>
+</div>
+
+<br/>
+
+<div>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:settings_allow_user_to_choose_if_email_will_be_sent) %>
+    :</span>
+  <span>
+    <%= radio_button_tag "settings[allow_force_email_sending]", true, Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending'] == 'true', :id => "settings_allow_force_email_sending" %>
+    <%= l(:general_text_Yes) %>
+    <%= radio_button_tag "settings[allow_force_email_sending]", false, Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending'] == 'false', :id => "settings_allow_force_email_sending" %>
+    <%= l(:general_text_No) %>
+  </span>
+</div>
+
+<br/>
+
 <table>
   <tbody>
   <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %> :</th>
@@ -24,32 +65,8 @@
 <br/>
 
 <div>
-  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:watcher_custom_field) %> :</span>
-  <span>
-    <%= select_tag "settings[watcher_custom_field_id]", options_for_select(IssueCustomField.all.collect{ |u| [u.name, u.id] }, Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id']), {include_blank: true, id: "settings_watcher_custom_field_id"} %>
-  </span>
-  <br>
-  <span colspan="2" style="text-align: left;font-weight: normal;"><%= l(:watcher_custom_field_hint) %> :</span>
-
-  <br/>
-  <span colspan="2" style="text-align: left;"><%= l(:unregistered_watchers_label) %> :</span>
-  <span>
-    <%= text_field_tag "settings[unregistered_watchers_label]", Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] %>
-  </span>
-  <div>
-    <span colspan="2" style="text-align: left;"><%= l(:workflow_from_custom_field) %> :</span>
-    <span>
-      <%= select_tag "settings[workflow_from_custom_field_id]", options_for_select(IssueCustomField.all.collect{ |u| [u.name, u.id] }, Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id']), {include_blank: true, id: "settings_workflow_from_custom_field_id"} %>
-    </span>
-  </div>
-</div>
-
-
-
-<br/>
-
-<div>
-  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:setting_emails_signature_for_unregistered_watchers) %> :</span>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:setting_emails_signature_for_unregistered_watchers) %>
+    :</span>
   <span>
     <%= text_area_tag "settings[emails_signature_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_signature_for_unregistered_watchers'], :id => "settings_emails_signature_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
   </span>
@@ -58,23 +75,12 @@
 <br/>
 
 <div>
-  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:setting_emails_footer_for_unregistered_watchers) %> :</span>
+  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:setting_emails_footer_for_unregistered_watchers) %>
+    :</span>
   <span>
     <%= text_area_tag "settings[emails_footer_for_unregistered_watchers]", Setting['plugin_redmine_unregistered_watchers']['emails_footer_for_unregistered_watchers'], :id => "settings_emails_footer_for_unregistered_watchers", :class => 'wiki-edit', :size => '100x4' %>
   </span>
   <span class="hint" style="font-weight: lighter;font-style: italic;">
     <%= l(:default_email_footer_for_unregistered_watchers) %>
-  </span>
-</div>
-
-<br/>
-
-<div>
-  <span colspan="2" style="text-align: left;font-weight: bold;"><%= l(:settings_allow_user_to_choose_if_email_will_be_sent) %> :</span>
-  <span>
-    <%= radio_button_tag "settings[allow_force_email_sending]", true, Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending'] == 'true', :id => "settings_allow_force_email_sending" %>
-    <%= l(:general_text_Yes) %>
-    <%= radio_button_tag "settings[allow_force_email_sending]", false, Setting['plugin_redmine_unregistered_watchers']['allow_force_email_sending'] == 'false', :id => "settings_allow_force_email_sending" %>
-    <%= l(:general_text_No) %>
   </span>
 </div>
