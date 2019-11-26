@@ -12,6 +12,7 @@ fr:
   watcher_custom_field: "Il est également possible d'utiliser un champ personnalisé classique pour saisir l'adresse de l'observateur.<br>Dans ce cas, le champ ne pourra avoir qu'une seule valeur et il ne sera pas relié au LDAP.<br>Si vous souhaitez utiliser ce mode de fonctionnement, précisez ici le champ personnalisé à utiliser :"
   watcher_custom_field_title: "Champ de saisie multi-valeur ajouté automatiquement sur les demandes"
   workflow_from_custom_field: "Donner au champ de saisie le même workflow que celui de ce champ personnalisé"
+  workflow_from_custom_field_hint: "Ce champs personnalisé 'technique' sera automatiquement masqué à l'affichage. Il doit être paramétré pour les trackers souhaités."
   settings_allow_user_to_choose_if_email_will_be_sent: "Permettre à l'utilisateur de choisir s'il faut envoyer un mail au demandeur ou non"
   unregistered_watchers_label: "Précisez ici le libellé du champ"
   field_notif_sent_to_unreg_watchers: "Envoyer une notification par email au demandeur "

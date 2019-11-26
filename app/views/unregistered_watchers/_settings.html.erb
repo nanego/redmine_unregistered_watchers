@@ -19,6 +19,8 @@
     <span>
       <%= select_tag "settings[workflow_from_custom_field_id]", options_for_select(IssueCustomField.all.collect {|u| [u.name, u.id]}, Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id']), {include_blank: true, id: "settings_workflow_from_custom_field_id"} %>
     </span>
+    <br>
+    <span><%= l(:workflow_from_custom_field_hint) %></span>
   </div>
 
   <br>
