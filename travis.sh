@@ -57,6 +57,7 @@ ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
 git clone https://github.com/jbbarth/redmine_base_deface.git plugins/redmine_base_deface
 git clone https://github.com/jbbarth/redmine_base_rspec.git plugins/redmine_base_rspec
 git clone https://github.com/nanego/redmine_base_stimulusjs.git plugins/redmine_base_stimulusjs
+git clone https://github.com/jbbarth/redmine_base_select2.git plugins/redmine_base_select2
 
 # install gems
 bundle install --jobs=4
