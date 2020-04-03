@@ -1,4 +1,4 @@
-Deface::Override.new :virtual_path  => 'issues/_history',
+Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                      :name          => 'unregistered_watchers_notifs_are_not_editable',
                      :replace       => 'erb[loud]:contains("render_notes")',
                      :text          => <<EOS
@@ -9,7 +9,7 @@ Deface::Override.new :virtual_path  => 'issues/_history',
 <% end %>
 EOS
 
-Deface::Override.new :virtual_path  => 'issues/_history',
+Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                      :name          => 'unregistered_watchers_notifs_has_no_actions',
                      :replace       => 'erb[loud]:contains("render_journal_actions")',
                      :text          => <<EOS
@@ -18,7 +18,7 @@ Deface::Override.new :virtual_path  => 'issues/_history',
 <% end %>
 EOS
 
-Deface::Override.new :virtual_path  => 'issues/_history',
+Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                      :name          => 'unregistered_watchers_notifs_have_no_author',
                      :replace       => 'erb[loud]:contains("authoring journal.created_on")',
                      :text          => <<EOS
@@ -45,7 +45,7 @@ Deface::Override.new :virtual_path  => 'issues/_history',
 </script>
 EOS
 
-Deface::Override.new :virtual_path  => 'issues/_history',
+Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                      :name          => 'add-container-to-mail-notifications',
                      :original      => '68e145deae6a29591c73e2ca568cbac07e2fdbd0',
                      :surround      => "div:contains(id, 'change-')",
