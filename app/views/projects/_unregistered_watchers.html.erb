@@ -20,9 +20,15 @@
 
           <tr id="status-<%= status.id %>" class="<%= cycle 'odd', 'even' %> status">
             <td class="checkboxes" style="text-align: left;">
-              <%= check_box_tag 'notifications[status_ids][]', status.id, @project.unregistered_watchers_notifications.map(&:issue_status_id).include?(status.id) %>
+              <%= check_box_tag 'notifications[status_ids][]',
+                                status.id,
+                                @project.unregistered_watchers_notifications.map(&:issue_status_id).include?(status.id),
+                                id: "notifications_status_ids_#{status.id}"
+              %>
             </td>
-            <td class="<%= status.name.try(:downcase) %>" style="text-align: left;max-width: 200px;"><%= status.name %></td>
+            <td class="<%= status.name.try(:downcase) %>" style="text-align: left;max-width: 200px;">
+              <%= label_tag "notifications_status_ids_#{status.id}", status.name %>
+            </td>
             <td class="emails" style="text-align: left;">
               <% if @project.unregistered_watchers_notifications.select{ |notif| notif[:issue_status_id] == status.id}.first.try(:email_body).present?
                    current_text = @project.unregistered_watchers_notifications.select{ |notif| notif[:issue_status_id] == status.id}.first.try(:email_body)

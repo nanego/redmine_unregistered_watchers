@@ -49,7 +49,9 @@ describe IssuesController, type: :controller do
                                           :description => 'This is the description',
                                           :priority_id => 5,
                                           :estimated_hours => '',
-                                          :unregistered_watchers => ["captain@example.com", "boss@email.com"],
+                                          :unregistered_watchers => ["captain@example.com",
+                                                                     "boss@email.com",
+                                                                     "some_provider@example.com"],
                                           :notif_sent_to_unreg_watchers => true,
                                           :custom_field_values => {'2' => 'Value for field 2'}}}
       end
@@ -61,18 +63,20 @@ describe IssuesController, type: :controller do
     expect(ActionMailer::Base.deliveries.size).to eq 3
 
     default_mail = ActionMailer::Base.deliveries.second
-    expect(default_mail['bcc'].to_s.include?(User.find(2).mail))
-    expect(!default_mail['bcc'].to_s.include?("captain@example.com"))
-    expect(!default_mail['bcc'].to_s.include?("boss@email.com"))
+    expect(default_mail['bcc'].value).to include User.find(2).mail
+    expect(default_mail['bcc'].value).to_not include "captain@example.com"
+    expect(default_mail['bcc'].value).to_not include "boss@email.com"
+    expect(default_mail['bcc'].value).to_not include "some_provider@example.com"
     default_mail.parts.each do |part|
-      expect(part.body.raw_source).to include("has been reported by")
-      expect(part.body.raw_source).to_not include("Email body content")
+      expect(part.body.raw_source).to include "has been reported by"
+      expect(part.body.raw_source).to_not include "Email body content"
     end
 
     unregistered_watchers_email = ActionMailer::Base.deliveries.first
-    expect(!unregistered_watchers_email['bcc'].to_s.include?(User.find(2).mail))
-    expect(unregistered_watchers_email['bcc'].to_s.include?("captain@example.com"))
-    expect(unregistered_watchers_email['bcc'].to_s.include?("boss@email.com"))
+    expect(unregistered_watchers_email['bcc'].value).to_not include User.find(2).mail
+    expect(unregistered_watchers_email['bcc'].value).to include "captain@example.com"
+    expect(unregistered_watchers_email['bcc'].value).to include "boss@email.com"
+    expect(unregistered_watchers_email['bcc'].value).to include "some_provider@example.com"
     unregistered_watchers_email.parts.each do |part|
       expect(part.body.raw_source).to_not include "has been reported by"
       expect(part.body.raw_source).to include "Email body content"
