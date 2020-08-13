@@ -18,4 +18,3 @@ fr:
   field_notif_sent_to_unreg_watchers: "Envoyer une notification par email au demandeur "
   setting_emails_signature_for_unregistered_watchers: "Signature ajoutée à la fin de chaque mail, avant le pied de page"
   permission_set_unregistered_watchers_to_issues: "Saisir les observateurs non-inscrits"
-  project_module_unregistered_watchers: "Observateurs non-inscrits"

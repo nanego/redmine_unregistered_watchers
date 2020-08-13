@@ -18,4 +18,3 @@ en:
   field_notif_sent_to_unreg_watchers: "Send a notification by email to the watchers"
   setting_emails_signature_for_unregistered_watchers: "Signature added to every emails before footer"
   permission_set_unregistered_watchers_to_issues: "Set unregistered watchers"
-  project_module_unregistered_watchers: "Unregistered watchers"

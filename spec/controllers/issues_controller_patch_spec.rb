@@ -39,6 +39,10 @@ describe IssuesController, type: :controller do
   before do
     @request.session[:user_id] = 2
     EnabledModule.create!(:project_id => 1, :name => "unregistered_watchers")
+    Setting.plain_text_mail = 0
+    Setting.default_language = 'en'
+    Setting["plugin_redmine_unregistered_watchers"]["emails_signature_for_unregistered_watchers"] = "The A Team for issue <<id>>"
+    Setting["plugin_redmine_unregistered_watchers"]["emails_footer_for_unregistered_watchers"] = "You received this message because you have been registered as watcher on this issue."
   end
 
   it "should send a notification to unregistered watchers after create" do
@@ -82,6 +86,8 @@ describe IssuesController, type: :controller do
     unregistered_watchers_email.parts.each do |part|
       expect(part.body.raw_source).to_not include "has been reported by"
       expect(part.body.raw_source).to include "Email body content for status 2"
+      # expect(part.body.raw_source).to include "The A Team for issue <<id>>" # Signature automatically added
+      # expect(part.body.raw_source).to include "you have been registered as watcher" # Footer
     end
   end
 
@@ -125,10 +131,14 @@ describe IssuesController, type: :controller do
 
     assert_difference 'Journal.count' do
       assert_difference('JournalDetail.count', 3) do
-        put :update, params: {:id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com", "msjoe@example.com", "mrjohn@example.com"],
-                                                   :notif_sent_to_unreg_watchers => true,
-                                                   :status_id => '5' # close issue
-        }}
+        put :update, params: {:id => 1,
+                              :issue => {unregistered_watchers: ["captain@example.com",
+                                                                 "another@email.com",
+                                                                 "msjoe@example.com",
+                                                                 "mrjohn@example.com"],
+                                         notif_sent_to_unreg_watchers: true,
+                                         status_id: '5' # close issue
+                              }}
       end
     end
     expect(ActionMailer::Base.deliveries.size).to eq 3
@@ -163,10 +173,12 @@ describe IssuesController, type: :controller do
 
     assert_difference 'Journal.count' do
       assert_difference('JournalDetail.count', 3) do
-        put :update, params: {:id => 1, :issue => {:unregistered_watchers => ["captain@example.com", "another@email.com"],
-                                                   :notif_sent_to_unreg_watchers => false,
-                                                   :status_id => '5' # close issue
-        }}
+        put :update, params: {id: 1,
+                              issue: {unregistered_watchers: ["captain@example.com",
+                                                              "another@email.com"],
+                                      notif_sent_to_unreg_watchers: false,
+                                      status_id: '5' # close issue
+                              }}
       end
     end
     expect(ActionMailer::Base.deliveries.size).to eq 3 # Only default notification to REGISTERED watchers
