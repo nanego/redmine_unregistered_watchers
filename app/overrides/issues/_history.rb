@@ -25,7 +25,7 @@ Deface::Override.new :virtual_path  => 'issues/tabs/_history',
 <% if journal.persisted? %>
   <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
 <% else %>
-  <%= "Mail automatique envoyé au demandeur il y a "%>
+  <%= "Mail automatique envoyé aux adresses des personnes notifiées il y a "%>
   <%= time_tag(journal.created_on).html_safe %>
   <% mail_id = "journal-"+journal.object_id.to_s+"-notes" %>
   <% link_id = "link-to-mail-notification-"+journal.object_id.to_s %>
