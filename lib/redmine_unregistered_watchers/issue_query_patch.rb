@@ -4,7 +4,7 @@ module PluginUnregisteredWatchers
   module IssueQueryPatch
     def initialize_available_filters
       super
-      values = UnregisteredWatcher.order(Arel.sql('LOWER(email)')).map(&:email).compact.uniq
+      values = UnregisteredWatcher.group(:email).order(Arel.sql('LOWER(email)')).pluck(:email)
       add_available_filter("unregistered_watchers", :type => :list_optional, :values => values)
     end
   end
