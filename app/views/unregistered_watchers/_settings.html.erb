@@ -51,7 +51,7 @@
 <table>
   <tbody>
   <th colspan="2" style="text-align: left;"><%= l(:default_email_bodies_by_status) %> :</th>
-  <% IssueStatus.find_each do |status| %>
+  <% IssueStatus.sorted.each do |status| %>
     <tr>
       <td>
         <%= status.name %> :
