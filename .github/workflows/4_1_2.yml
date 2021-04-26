@@ -85,6 +85,12 @@ jobs:
           repository: jbbarth/redmine_base_rspec
           path: redmine/plugins/redmine_base_rspec
 
+      - name: Checkout dependencies - Base Select2 plugin
+        uses: actions/checkout@v2
+        with:
+          repository: jbbarth/redmine_base_select2
+          path: redmine/plugins/redmine_base_select2
+
       - name: Prepare Redmine source
         working-directory: redmine
         run: |
