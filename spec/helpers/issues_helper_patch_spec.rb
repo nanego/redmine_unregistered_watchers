@@ -131,6 +131,7 @@ describe "IssuesHelperPatch" do
   end
 
   it "should IssuesHelper#show_detail should show old and new values with a project attribute" do
+    User.current = User.find(2)
     detail = JournalDetail.new(:property => 'attr', :prop_key => 'project_id', :old_value => 1, :value => 2)
     assert_match 'eCookbook', show_detail(detail, true)
     assert_match 'OnlineStore', show_detail(detail, true)
