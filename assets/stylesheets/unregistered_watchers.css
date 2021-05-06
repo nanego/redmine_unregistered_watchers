@@ -30,3 +30,6 @@
    font-style: oblique;
 }
 
+.unregistered_watchers_history.hidden{
+    display: none !important;
+}

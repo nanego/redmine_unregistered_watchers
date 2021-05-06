@@ -34,7 +34,7 @@ Deface::Override.new :virtual_path  => 'issues/tabs/_history',
 <script type="text/javascript">
   var toggle_mail_details = function(event, mail_id, link_id) {
     blockEventPropagation(event);
-    $('#'+mail_id).toggle();
+    $('#'+mail_id).toggleClass('hidden');
     if($('#'+mail_id).is(':visible')) {
       $('#'+link_id).text('Masquer le contenu du mail')
     }else{
