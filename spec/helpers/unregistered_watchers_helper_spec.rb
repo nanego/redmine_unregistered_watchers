@@ -17,4 +17,12 @@ describe "UnregisteredWatchersHelper" do
     body_with_last_note = email_body_with_variables(issue_1, "Last note: <<last_note>>")
     expect(body_with_last_note).to eq "Last note: Some notes with Redmine links: #2, r2."
   end
+
+  it "does not display private notes" do
+    Journal.create(journalized: issue_1, private_notes: true, notes: "This notes is private")
+    expect(issue_1.last_notes).to eq "This notes is private"
+
+    body_with_last_note = email_body_with_variables(issue_1, "Last public note: <<last_note>>")
+    expect(body_with_last_note).to eq "Last public note: Some notes with Redmine links: #2, r2."
+  end
 end

@@ -61,7 +61,6 @@ describe IssuesController, type: :controller do
                                           :notif_sent_to_unreg_watchers => true,
                                           :custom_field_values => {'2' => 'Value for field 2'}}}
       end
-
     end
 
     expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)

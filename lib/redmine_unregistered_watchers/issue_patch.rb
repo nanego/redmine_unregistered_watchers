@@ -29,7 +29,11 @@ class Issue < ActiveRecord::Base
   end
 
   def last_note
-    last_notes
+    last_public_notes
+  end
+
+  def last_public_notes
+    journals.where.not(notes: '').where(private_notes: false).reorder(:id => :desc).first.try(:notes)
   end
 
   def notify_unreg_watchers?(message)
