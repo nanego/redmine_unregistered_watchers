@@ -29,7 +29,7 @@ class Issue < ActiveRecord::Base
   end
 
   def last_note
-    self.journals.map(&:notes).reject(&:blank?).first
+    last_notes
   end
 
   def notify_unreg_watchers?(message)
