@@ -4,8 +4,11 @@ module PluginUnregisteredWatchers
   module IssueQueryPatch
     def initialize_available_filters
       super
-      values = UnregisteredWatcher.group(:email).order(Arel.sql('LOWER(email)')).pluck(:email)
-      add_available_filter("unregistered_watchers", :type => :list_optional, :values => values)
+      add_available_filter("unregistered_watchers", :type => :list_optional, :values => lambda {unregistered_watchers_values})
+    end
+
+    def unregistered_watchers_values
+      UnregisteredWatcher.group(:email).order(Arel.sql('LOWER(email)')).pluck(:email)
     end
   end
 end
