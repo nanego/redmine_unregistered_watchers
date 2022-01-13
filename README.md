@@ -1,22 +1,36 @@
 Redmine Unregistered Watchers plugin
 ======================
 
-This Redmine plugin allows us to add watchers to issues when these users are not registered. These watchers will only be notified when the selected status are updated.
+This Redmine plugin allows us to add watchers to issues when these users are not registered.
+These watchers will only be notified when the selected status are updated.
 
-This new module can be activated by project.
-For each issue, we specify the email addresses of the unregistered watchers.
-A new panel in the project settings make it possible de specify which status update generate an email to these unregister watchers. It's also in the project settings that we specify the content of the email generated regarding the new issue status.
+The related module must be activated for each project.
+The email addresses of the unregistered watchers are specified in each issue.
+A new panel in the project settings allows to select which status update generates an email to these unregister watchers.
+Content of the generated email is also specified in the project settings.
 
-It's now possible to insert variables in messages sent to watchers. You need to surround issue's attributes with 'greater than' and 'less than' signs: \<\<issue_attribute\>\>.
+It is possible to insert variables in the emails sent to the watchers.
+Just surround issue's attributes with curly brackets {issue_attribute}.
 Examples:
 
-    <<id>>
-    <<status>>
-    <<subject>>
-    <<tracker>>
-    <<created_on>>
-    <<last_note>>
+    Standard attributes:
+    {id}
+    {status}
+    {subject}
+    {tracker}
+    {priority}
+    {fixed_version}
+    {created_on}
+    etc.
 
+    Custom fields:
+    by id: {cf_5}
+    by name: {cf_name_of_the_field} (replace spaces by underscores)
+
+    Special attributes:
+    {last_note}
+
+Previous syntax using greater and less signs is deprecated but still supported (like <<tracker>> or <<last_note>>).
  
 Installation
 ------------
