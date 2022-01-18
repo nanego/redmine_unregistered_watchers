@@ -29,6 +29,7 @@ Examples:
 
     Special attributes:
     {last_note}
+    {magic_link_*magic-link-rule-id*} (Only available if the magic-link plugin is installed)
 
 Previous syntax using greater and less signs is deprecated but still supported (like <<tracker>> or <<last_note>>).
  

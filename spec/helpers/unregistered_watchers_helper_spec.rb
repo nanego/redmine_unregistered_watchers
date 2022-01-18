@@ -3,7 +3,9 @@ require "spec_helper"
 describe "UnregisteredWatchersHelper" do
   include UnregisteredWatchersHelper
 
-  fixtures :issues, :journals, :journal_details
+  fixtures :issues, :journals, :journal_details, :projects, :users, :enabled_modules, :enumerations,
+           :trackers, :issue_statuses, :versions, :custom_fields, :custom_values, :custom_fields_projects,
+           :custom_fields_trackers, :projects_trackers, :roles, :member_roles, :members
 
   let(:issue_1) { Issue.find(1) }
 
@@ -78,6 +80,19 @@ describe "UnregisteredWatchersHelper" do
         body = "Cannot add article {cf_Float_Field} to shopping cart"
         expect(email_body_with_variables(issue_1, body)).to eq "Cannot add article 2.1 to shopping cart"
       end
+    end
+
+    if Redmine::Plugin.installed?(:redmine_magic_link)
+
+      let!(:magic_link_rule) { MagicLinkRule.create!(role_id: 1, enabled: true, enabled_for_unregistered_watchers: true) }
+
+      describe :magic_link do
+        it "replaces a magic link" do
+          body = "Click on this link : {magic_link_#{magic_link_rule.id}}"
+          expect(email_body_with_variables(issue_1, body)).to eq "Click on this link : http://test.host/issues/1?issue_key=#{issue_1.issue_magic_link_rules.last.magic_link_hash}"
+        end
+      end
+
     end
 
   end

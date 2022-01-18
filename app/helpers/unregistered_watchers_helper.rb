@@ -1,7 +1,7 @@
 module UnregisteredWatchersHelper
   def email_body_with_variables(issue, body)
     # Deprecated variables (using <<...>> syntax)
-    body.gsub!( /<<\S*>>/) { |match| issue_attribute_value(issue, match.delete_prefix('<<').delete_suffix('>>')) }
+    body.gsub!(/<<\S*>>/) { |match| issue_attribute_value(issue, match.delete_prefix('<<').delete_suffix('>>')) }
 
     # variables using {...} syntax
     body.gsub!(/{[[:word:]]*}/) do |attribute|
@@ -11,6 +11,8 @@ module UnregisteredWatchersHelper
         custom_field_value_by_id(issue, attribute.delete_prefix("cf_"))
       when /^cf_[[:word:]]*/
         custom_field_value_by_name(issue, attribute.delete_prefix("cf_"))
+      when /^magic_link_\d/
+        magic_link_for_unregistered_watchers(issue, attribute.delete_prefix("magic_link_"))
       else
         issue_attribute_value(issue, attribute)
       end
@@ -31,6 +33,21 @@ module UnregisteredWatchersHelper
 
   def issue_attribute_value(issue, attribute)
     issue.send(attribute.downcase.to_sym) if issue.respond_to?(attribute.downcase.to_sym)
+  end
+
+  def magic_link_for_unregistered_watchers(issue, rule_id)
+    if Redmine::Plugin.installed?(:redmine_magic_link)
+      rule = MagicLinkRule.where(id: rule_id, enabled_for_unregistered_watchers: true).first
+      if rule.present?
+        magic_link_hash = issue.add_magic_link_hash(rule)
+        rule.log_new_link_sent(issue)
+        url_for(controller: 'issues',
+                action: 'show',
+                id: issue.id,
+                issue_key: magic_link_hash,
+                only_path: false)
+      end
+    end
   end
 
 end
