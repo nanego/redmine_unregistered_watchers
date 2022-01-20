@@ -37,15 +37,16 @@ module UnregisteredWatchersHelper
 
   def magic_link_for_unregistered_watchers(issue, rule_id)
     if Redmine::Plugin.installed?(:redmine_magic_link)
-      rule = MagicLinkRule.where(id: rule_id, enabled_for_unregistered_watchers: true).first
+      rule = MagicLinkRule.where(id: rule_id, enabled: true, enabled_for_unregistered_watchers: true).first
       if rule.present?
         magic_link_hash = issue.add_magic_link_hash(rule)
         rule.log_new_link_sent(issue)
-        url_for(controller: 'issues',
-                action: 'show',
-                id: issue.id,
-                issue_key: magic_link_hash,
-                only_path: false)
+        Rails.application.routes.url_helpers.url_for(controller: 'issues',
+                                                     action: 'show',
+                                                     id: issue.id,
+                                                     issue_key: magic_link_hash,
+                                                     host: Mailer.default_url_options[:host],
+                                                     only_path: false)
       end
     end
   end

@@ -1,5 +1,5 @@
 <% if @issue.project.module_enabled?("unregistered_watchers") &&
-    Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].blank? %>
+  Setting['plugin_redmine_unregistered_watchers']['watcher_custom_field_id'].blank? %>
 
   <% if Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id'].present?
        workflow_from_custom_field = CustomField.find(Setting['plugin_redmine_unregistered_watchers']['workflow_from_custom_field_id'])
@@ -8,11 +8,15 @@
   <% if workflow_from_custom_field.blank? || @issue.editable_custom_fields(User.current).include?(workflow_from_custom_field) %>
 
     <% if User.current.allowed_to?(:set_unregistered_watchers_to_issues, @issue.project) %>
-      <p id=issues_notify_unregistered_watchers>
-        <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
-        <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
-        <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, {label: Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label']}, {:multiple => true} %>
-      </p>
+      <% current_unregistered_watchers = [] %>
+
+      <%= labelled_fields_for :issue, @issue do |f| %>
+        <p id=issues_notify_unregistered_watchers>
+          <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
+          <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
+          <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, { label: Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] }, { :multiple => true } %>
+        </p>
+      <% end %>
 
       <script>
 
@@ -76,7 +80,7 @@
     <% if workflow_from_custom_field.present? %>
       <%= javascript_tag do %>
         $(document).ready(function () {
-          $('input#issue_custom_field_values_<%= workflow_from_custom_field.id %>').closest('p').css('display', 'none');
+        $('input#issue_custom_field_values_<%= workflow_from_custom_field.id %>').closest('p').css('display', 'none');
         });
       <% end %>
     <% end %>

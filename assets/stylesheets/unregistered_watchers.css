@@ -4,7 +4,8 @@
 
 #label_show_watchers {
     /* color: #666; */
-    min-width: 175px;
+    padding-right: 15px;
+    min-width: 160px;
     font-weight: bold;
     display: inline-block;
     /* vertical-align: super; */
