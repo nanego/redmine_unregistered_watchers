@@ -89,7 +89,7 @@ describe "UnregisteredWatchersHelper" do
       describe :magic_link do
         it "replaces a magic link" do
           body = "Click on this link : {magic_link_#{magic_link_rule.id}}"
-          expect(email_body_with_variables(issue_1, body)).to eq "Click on this link : http://test.host/issues/1?issue_key=#{issue_1.issue_magic_link_rules.last.magic_link_hash}"
+          expect(email_body_with_variables(issue_1, body)).to eq "Click on this link : http://localhost/issues/1?issue_key=#{issue_1.issue_magic_link_rules.last.magic_link_hash}"
         end
       end
 

@@ -21,7 +21,7 @@ class Issue < ActiveRecord::Base
 
   def send_notification_to_unregistered_watchers
     if self.project.module_enabled?("unregistered_watchers")
-      new_issue_notif = self.project.unregistered_watchers_notifications.find_by_issue_status_id(status_id)
+      new_issue_notif = self.project.unreg_watchers_notif_for(status_id: status_id, tracker_id: tracker_id)
       if notify_unreg_watchers?(new_issue_notif)
         Mailer.deliver_issue_to_unregistered_watchers(self, new_issue_notif)
       end

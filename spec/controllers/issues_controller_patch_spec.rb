@@ -195,4 +195,100 @@ describe IssuesController, type: :controller do
 
   end
 
+  describe "messages by tracker" do
+
+    let!(:content_for_tracker_1) { "[Bug] the issue has been open and assigned to you !" }
+    let!(:content_for_tracker_2) { "Feature request: the issue has been open !" }
+
+    before do
+      Project.update({:unreg_watchers_all_trackers => false, :unreg_watchers_tracker_ids => [1, 2]})
+
+      UnregisteredWatchersNotification.create!(:issue_status_id => 1,
+                                               :project_id => 1,
+                                               :email_body => content_for_tracker_1,
+                                               :tracker_id => 1)
+
+      UnregisteredWatchersNotification.create!(:issue_status_id => 1,
+                                               :project_id => 1,
+                                               :email_body => content_for_tracker_2,
+                                               :tracker_id => 2)
+    end
+
+    it "sends a notification depending on the issue tracker" do
+      ActionMailer::Base.deliveries.clear
+
+      assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+        assert_difference 'Issue.count' do
+          post :create, params: {:project_id => 1,
+                                 :issue => {:tracker_id => 1,
+                                            :subject => 'This is the test_new issue',
+                                            :description => 'This is the description',
+                                            :priority_id => 5,
+                                            :unregistered_watchers => ["some_provider@example.com"],
+                                            :notif_sent_to_unreg_watchers => true,
+                                            :custom_field_values => {'2' => 'Value for field 2'}}}
+        end
+      end
+
+      expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
+
+      unregistered_watchers_email = ActionMailer::Base.deliveries.first
+      expect(unregistered_watchers_email['bcc'].value).to include "some_provider@example.com"
+      unregistered_watchers_email.parts.each do |part|
+        expect(part.body.raw_source).to include content_for_tracker_1
+      end
+    end
+
+    it "sends a different notification depending on the issue tracker" do
+      ActionMailer::Base.deliveries.clear
+
+      assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+        assert_difference 'Issue.count' do
+          post :create, params: {:project_id => 1,
+                                 :issue => {:tracker_id => 2,
+                                            :subject => 'This is the test_new issue',
+                                            :description => 'This is the description',
+                                            :priority_id => 5,
+                                            :unregistered_watchers => ["some_provider@example.com"],
+                                            :notif_sent_to_unreg_watchers => true,
+                                            :custom_field_values => {'2' => 'Value for field 2'}}}
+        end
+      end
+
+      expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
+
+      unregistered_watchers_email = ActionMailer::Base.deliveries.first
+      expect(unregistered_watchers_email['bcc'].value).to include "some_provider@example.com"
+      unregistered_watchers_email.parts.each do |part|
+        expect(part.body.raw_source).to include content_for_tracker_2
+      end
+    end
+
+    it "sends a standard notification for trackers without specified message" do
+      ActionMailer::Base.deliveries.clear
+      Project.update({:unreg_watchers_all_trackers => true})
+
+      assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+        assert_difference 'Issue.count' do
+          post :create, params: {:project_id => 1,
+                                 :issue => {:tracker_id => 3,
+                                            :subject => 'This is a new issue',
+                                            :description => 'This is the description',
+                                            :priority_id => 5,
+                                            :unregistered_watchers => ["some_provider_03@example.com"],
+                                            :notif_sent_to_unreg_watchers => true,
+                                            :custom_field_values => {'2' => 'Value for field 2'}}}
+        end
+      end
+
+      expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
+
+      unregistered_watchers_email = ActionMailer::Base.deliveries.first
+      expect(unregistered_watchers_email['bcc'].value).to include "some_provider_03@example.com"
+      unregistered_watchers_email.parts.each do |part|
+        expect(part.body.raw_source).to include "Email body content for status 2"
+      end
+    end
+  end
+
 end

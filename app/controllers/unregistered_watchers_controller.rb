@@ -5,16 +5,23 @@ class UnregisteredWatchersController < ApplicationController
   layout "admin"
 
   def update_status_notifications_per_project
-    @notifications = []
+    notifs = []
     if params[:notifications] && params[:notifications][:status_ids]
       params[:notifications][:status_ids].reject!(&:blank?)
       params[:notifications][:status_ids].each do |status_id|
-        notif = UnregisteredWatchersNotification.new(issue_status_id: status_id)
-        notif.email_body = params[:notifications][:emails][status_id]
-        @notifications << notif
+        params[:notifications][:status][status_id].each do |tracker_id, message|
+          notif_tracker_id = (tracker_id.to_i == 0 ? nil : tracker_id.to_i)
+          notif = UnregisteredWatchersNotification.find_or_initialize_by(project: @project,
+                                                                         issue_status_id: status_id,
+                                                                         tracker_id: notif_tracker_id)
+
+          notif.email_body = message
+          notifs << notif
+        end
       end
     end
-    @project.unregistered_watchers_notifications = @notifications
+    @project.unregistered_watchers_notifications = notifs
+    @project.save
     redirect_to settings_project_path(@project, :tab => :unregistered_watchers)
   end
 
@@ -24,11 +31,11 @@ class UnregisteredWatchersController < ApplicationController
 
   private
 
-    def find_project
-      project_id = params[:notifications][:project_id]
-      @project = Project.find(project_id)
-    rescue ActiveRecord::RecordNotFound
-      render_404
-    end
+  def find_project
+    project_id = params[:notifications][:project_id]
+    @project = Project.find(project_id)
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
 
 end

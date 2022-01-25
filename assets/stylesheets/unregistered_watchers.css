@@ -34,3 +34,11 @@
 .unregistered_watchers_history.hidden{
     display: none !important;
 }
+
+#tab-content-unregistered_watchers table {
+    overflow: scroll;
+}
+
+#tab-content-unregistered_watchers table td.messages table th {
+    text-align: center;
+}

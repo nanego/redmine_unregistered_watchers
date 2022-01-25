@@ -1,52 +1,99 @@
-<% all_status = IssueStatus.order(:position) %>
+<%= form_for @project, :html => { :method => :put, :id => 'unreg_watchers_trackers_form', :class => "tabular" } do |f| %>
+  <%= hidden_field_tag 'tab', 'unregistered_watchers' %>
+  <div class="box tabular">
+    <p>
+      <label>Message envoyé :</label>
+      <label class="block">
+        <%= radio_button_tag 'project[unreg_watchers_all_trackers]', 1, @project.unreg_watchers_all_trackers, :id => 'all_trackers_on',
+                             :data => { :disables => '.selected_trackers input' } %>
+        Commun à tous les trackers
+      </label>
+      <label class="block">
+        <%= radio_button_tag 'project[unreg_watchers_all_trackers]', 0, !@project.unreg_watchers_all_trackers, :id => 'all_trackers_off',
+                             :data => { :enables => '.selected_trackers input' } %>
+        Spécifique à ces trackers :
+      </label>
+      <% @project.trackers.sorted.each do |tracker| %>
+        <label class="block selected_trackers" style="padding-left:2em;">
+          <%= check_box_tag 'project[unreg_watchers_tracker_ids][]', tracker.id,
+                            @project.unreg_watchers_tracker_ids.include?(tracker.id), :id => "unreg_watchers_tracker_#{tracker.id}" %>
+          <%= tracker.name %>
+        </label>
+      <% end %>
+      <%= hidden_field_tag 'project[unreg_watchers_tracker_ids][]', '' %>
+    </p>
+    <p><%= submit_tag l(:button_save) %></p>
+  </div>
+<% end %>
+
 <div>
-  <% if all_status.any? %>
 
-    <%= form_for(:notifications, {:as => :notifications,
-                          # :remote => true,
-                          :url => update_status_notifications_per_project_path,
-                          :method => :put,
-                          :html => { :id => "status_form" }} ) do |f| %>
-      <table class="list status">
-        <thead>
-          <tr>
-            <th></th>
-            <th style="text-align: left;"><%= l(:label_issue_status) %></th>
-            <th><%= l(:field_message) %></th>
-          </tr>
-        </thead>
-        <tbody>
-        <% all_status.each do |status| %>
+  <%= form_for(:notifications, { :as => :notifications,
+                                 # :remote => true,
+                                 :url => update_status_notifications_per_project_path,
+                                 :method => :put,
+                                 :html => { :id => "status_form" } }) do |f| %>
 
-          <tr id="status-<%= status.id %>" class="<%= cycle 'odd', 'even' %> status">
-            <td class="checkboxes" style="text-align: left;">
-              <%= check_box_tag 'notifications[status_ids][]',
-                                status.id,
-                                @project.unregistered_watchers_notifications.map(&:issue_status_id).include?(status.id),
-                                id: "notifications_status_ids_#{status.id}"
-              %>
-            </td>
-            <td class="<%= status.name.try(:downcase) %>" style="text-align: left;max-width: 200px;">
-              <%= label_tag "notifications_status_ids_#{status.id}", status.name %>
-            </td>
-            <td class="emails" style="text-align: left;">
-              <% if @project.unregistered_watchers_notifications.select{ |notif| notif[:issue_status_id] == status.id}.first.try(:email_body).present?
-                   current_text = @project.unregistered_watchers_notifications.select{ |notif| notif[:issue_status_id] == status.id}.first.try(:email_body)
-                 else
-                   current_text = Setting['plugin_redmine_unregistered_watchers']['status'].blank? ? "" : Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s]
-                 end %>
-              <%= text_area_tag 'notifications[emails]['+status.id.to_s+']', current_text, rows: 5, cols: 150 %>
-            </td>
-          </tr>
-        <% end; reset_cycle %>
-        </tbody>
-      </table>
+    <table class="list status">
+      <thead>
+      <tr>
+        <th></th>
+        <th style="text-align: left;"><%= l(:label_issue_status) %></th>
+        <th><%= l(:field_message) %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% IssueStatus.sorted.each do |status| %>
 
-      <%= f.hidden_field :project_id, :value => @project.id %>
-      <%= f.submit l(:button_save) %>
-    <% end %>
+        <% default_message_per_status = Setting['plugin_redmine_unregistered_watchers']['status'].blank? ? "" : Setting['plugin_redmine_unregistered_watchers']['status'][status.id.to_s] %>
 
-  <% else %>
-    <p class="nodata"><%= l(:label_no_data) %></p>
+        <tr id="status-<%= status.id %>" class="<%= cycle 'odd', 'even' %> status">
+          <td class="checkboxes" style="text-align: left;">
+            <%= check_box_tag 'notifications[status_ids][]',
+                              status.id,
+                              @project.unregistered_watchers_notifications.map(&:issue_status_id).include?(status.id),
+                              id: "notifications_status_ids_#{status.id}"
+            %>
+          </td>
+          <td class="<%= status.name.try(:downcase) %>" style="text-align: left;max-width: 200px;">
+            <%= label_tag "notifications_status_ids_#{status.id}", status.name %>
+          </td>
+          <td class="messages" style="text-align: left;">
+            <% if @project.unreg_watchers_all_trackers %>
+              <% notif = @project.unregistered_watchers_notifications.where(issue_status_id: status.id, tracker: nil).first
+                 current_text = notif.present? ? notif.email_body : default_message_per_status %>
+              <%= text_area_tag "notifications[status][#{status.id}][0]", current_text, :class => 'textarea', :rows => 5, style: 'width: 1100px' %>
+            <% else %>
+              <% trackers = Tracker.where(id: @project.unreg_watchers_tracker_ids).sorted %>
+              <table>
+                <thead>
+                <% trackers.each do |tracker| %>
+                  <th><%= tracker.name %></th>
+                <% end %>
+                </thead>
+                <tbody>
+                <tr>
+                  <% trackers.each do |tracker| %>
+                    <td>
+
+                      <% notif = @project.unregistered_watchers_notifications.where(issue_status: status, tracker: tracker).first
+                         current_text = notif.present? ? notif.email_body : default_message_per_status %>
+                      <%= text_area_tag "notifications[status][#{status.id}][#{tracker.id}]", current_text, :class => 'textarea', :rows => 5, style: 'width: 550px;' %>
+
+                    </td>
+                  <% end %>
+                </tr>
+                </tbody>
+              </table>
+            <% end %>
+          </td>
+        </tr>
+      <% end; reset_cycle %>
+      </tbody>
+    </table>
+
+    <%= f.hidden_field :project_id, :value => @project.id %>
+    <%= f.submit l(:button_save) %>
   <% end %>
+
 </div>
