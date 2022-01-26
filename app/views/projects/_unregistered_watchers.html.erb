@@ -2,16 +2,16 @@
   <%= hidden_field_tag 'tab', 'unregistered_watchers' %>
   <div class="box tabular">
     <p>
-      <label>Message envoyé :</label>
+      <label>Notification identique pour tous les trackers :</label>
       <label class="block">
         <%= radio_button_tag 'project[unreg_watchers_all_trackers]', 1, @project.unreg_watchers_all_trackers, :id => 'all_trackers_on',
                              :data => { :disables => '.selected_trackers input' } %>
-        Commun à tous les trackers
+        Oui
       </label>
       <label class="block">
         <%= radio_button_tag 'project[unreg_watchers_all_trackers]', 0, !@project.unreg_watchers_all_trackers, :id => 'all_trackers_off',
                              :data => { :enables => '.selected_trackers input' } %>
-        Spécifique à ces trackers :
+        Non, spécifier un message différent pour ces trackers :
       </label>
       <% @project.trackers.sorted.each do |tracker| %>
         <label class="block selected_trackers" style="padding-left:2em;">
@@ -70,16 +70,24 @@
                 <% trackers.each do |tracker| %>
                   <th><%= tracker.name %></th>
                 <% end %>
+                <% if trackers.size < @project.trackers.size %>
+                  <th>Autres trackers</th>
+                <% end %>
                 </thead>
                 <tbody>
                 <tr>
                   <% trackers.each do |tracker| %>
                     <td>
-
                       <% notif = @project.unregistered_watchers_notifications.where(issue_status: status, tracker: tracker).first
                          current_text = notif.present? ? notif.email_body : default_message_per_status %>
                       <%= text_area_tag "notifications[status][#{status.id}][#{tracker.id}]", current_text, :class => 'textarea', :rows => 5, style: 'width: 550px;' %>
-
+                    </td>
+                  <% end %>
+                  <% if trackers.size < @project.trackers.size %>
+                    <td>
+                      <% notif = @project.unregistered_watchers_notifications.where(issue_status_id: status.id, tracker: nil).first
+                         current_text = notif.present? ? notif.email_body : default_message_per_status %>
+                      <%= text_area_tag "notifications[status][#{status.id}][0]", current_text, :class => 'textarea', :rows => 5, style: 'width: 550px' %>
                     </td>
                   <% end %>
                 </tr>
