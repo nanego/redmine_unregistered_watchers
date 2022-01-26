@@ -11,11 +11,13 @@ class UnregisteredWatchersController < ApplicationController
       params[:notifications][:status_ids].each do |status_id|
         params[:notifications][:status][status_id].each do |tracker_id, message|
           notif_tracker_id = (tracker_id.to_i == 0 ? nil : tracker_id.to_i)
-          notif = UnregisteredWatchersNotification.find_or_initialize_by(project: @project,
-                                                                         issue_status_id: status_id,
-                                                                         tracker_id: notif_tracker_id)
-
+          notif = @project.unregistered_watchers_notifications
+                          .find_or_initialize_by(issue_status_id: status_id,
+                                                 tracker_id: notif_tracker_id)
           notif.email_body = message
+          if notif.persisted?
+            notif.save
+          end
           notifs << notif
         end
       end
