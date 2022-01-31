@@ -162,6 +162,38 @@ describe IssuesController, type: :controller do
     end
   end
 
+  it "does NOT send a notification to unregistered watchers after update if notification message is empty" do
+    ActionMailer::Base.deliveries.clear
+
+    content = "Custom body: the issue has been closed !"
+
+    UnregisteredWatchersNotification.create!(:issue_status_id => 5, :project_id => 1, :email_body => "") # EMPTY BODY
+
+    assert_difference 'Journal.count' do
+      assert_difference('JournalDetail.count', 3) do
+        put :update, params: {:id => 1,
+                              :issue => {unregistered_watchers: ["captain@example.com",
+                                                                 "another@email.com",
+                                                                 "msjoe@example.com",
+                                                                 "mrjohn@example.com"],
+                                         notif_sent_to_unreg_watchers: true,
+                                         status_id: '5' # close issue
+                              }}
+      end
+    end
+    expect(ActionMailer::Base.deliveries.size).to eq 2
+
+    default_mail = ActionMailer::Base.deliveries.first
+
+    expect(default_mail['bcc'].value).to include User.find(2).mail
+    expect(default_mail['bcc'].value).to_not include "captain@example.com"
+    expect(default_mail['bcc'].value).to_not include "boss@email.com"
+    default_mail.parts.each do |part|
+      expect(part.body.raw_source).to include "has been updated by"
+      expect(part.body.raw_source).to_not include content
+    end
+  end
+
   it "should send a notification to unregistered watchers after update and create journal details unless sent notif check box has been unchecked" do
     ActionMailer::Base.deliveries.clear
 
