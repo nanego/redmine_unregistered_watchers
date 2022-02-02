@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
         notif = unregistered_watchers_notifications.find_by(issue_status_id: status_id, tracker_id: nil)
       end
     end
-    if notif.email_body.present?
+    if notif.present? && notif.email_body.present?
       notif
     else
       nil
