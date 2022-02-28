@@ -50,16 +50,16 @@ describe IssuesController, type: :controller do
 
     assert_difference 'ActionMailer::Base.deliveries.size', 3 do
       assert_difference 'Issue.count' do
-        post :create, params: {:project_id => 1,
-                               :issue => {:tracker_id => 3,
-                                          :subject => 'This is the test_new issue',
-                                          :description => 'This is the description',
-                                          :priority_id => 5,
-                                          :unregistered_watchers => ["captain@example.com",
-                                                                     "boss@email.com",
-                                                                     "some_provider@example.com"],
-                                          :notif_sent_to_unreg_watchers => true,
-                                          :custom_field_values => {'2' => 'Value for field 2'}}}
+        post :create, params: { :project_id => 1,
+                                :issue => { :tracker_id => 3,
+                                            :subject => 'This is the test_new issue',
+                                            :description => 'This is the description',
+                                            :priority_id => 5,
+                                            :unregistered_watchers => ["captain@example.com",
+                                                                       "boss@email.com",
+                                                                       "some_provider@example.com"],
+                                            :notif_sent_to_unreg_watchers => true,
+                                            :custom_field_values => { '2' => 'Value for field 2' } } }
       end
     end
 
@@ -95,15 +95,15 @@ describe IssuesController, type: :controller do
 
     assert_difference 'ActionMailer::Base.deliveries.size', 3 do
       assert_difference 'Issue.count' do
-        post :create, params: {:project_id => 1,
-                               :issue => {:tracker_id => 3,
-                                          :subject => 'This is the test_new issue',
-                                          :description => 'This is the description',
-                                          :priority_id => 5,
-                                          :estimated_hours => '',
-                                          :unregistered_watchers => ["captain@example.com", "boss@email.com"],
-                                          :notif_sent_to_unreg_watchers => false,
-                                          :custom_field_values => {'2' => 'Value for field 2'}}}
+        post :create, params: { :project_id => 1,
+                                :issue => { :tracker_id => 3,
+                                            :subject => 'This is the test_new issue',
+                                            :description => 'This is the description',
+                                            :priority_id => 5,
+                                            :estimated_hours => '',
+                                            :unregistered_watchers => ["captain@example.com", "boss@email.com"],
+                                            :notif_sent_to_unreg_watchers => false,
+                                            :custom_field_values => { '2' => 'Value for field 2' } } }
       end
     end
 
@@ -130,14 +130,14 @@ describe IssuesController, type: :controller do
 
     assert_difference 'Journal.count' do
       assert_difference('JournalDetail.count', 3) do
-        put :update, params: {:id => 1,
-                              :issue => {unregistered_watchers: ["captain@example.com",
-                                                                 "another@email.com",
-                                                                 "msjoe@example.com",
-                                                                 "mrjohn@example.com"],
-                                         notif_sent_to_unreg_watchers: true,
-                                         status_id: '5' # close issue
-                              }}
+        put :update, params: { :id => 1,
+                               :issue => { unregistered_watchers: ["captain@example.com",
+                                                                   "another@email.com",
+                                                                   "msjoe@example.com",
+                                                                   "mrjohn@example.com"],
+                                           notif_sent_to_unreg_watchers: true,
+                                           status_id: '5' # close issue
+                               } }
       end
     end
     expect(ActionMailer::Base.deliveries.size).to eq 3
@@ -171,14 +171,14 @@ describe IssuesController, type: :controller do
 
     assert_difference 'Journal.count' do
       assert_difference('JournalDetail.count', 3) do
-        put :update, params: {:id => 1,
-                              :issue => {unregistered_watchers: ["captain@example.com",
-                                                                 "another@email.com",
-                                                                 "msjoe@example.com",
-                                                                 "mrjohn@example.com"],
-                                         notif_sent_to_unreg_watchers: true,
-                                         status_id: '5' # close issue
-                              }}
+        put :update, params: { :id => 1,
+                               :issue => { unregistered_watchers: ["captain@example.com",
+                                                                   "another@email.com",
+                                                                   "msjoe@example.com",
+                                                                   "mrjohn@example.com"],
+                                           notif_sent_to_unreg_watchers: true,
+                                           status_id: '5' # close issue
+                               } }
       end
     end
     expect(ActionMailer::Base.deliveries.size).to eq 2
@@ -204,12 +204,12 @@ describe IssuesController, type: :controller do
 
     assert_difference 'Journal.count' do
       assert_difference('JournalDetail.count', 3) do
-        put :update, params: {id: 1,
-                              issue: {unregistered_watchers: ["captain@example.com",
-                                                              "another@email.com"],
-                                      notif_sent_to_unreg_watchers: false,
-                                      status_id: '5' # close issue
-                              }}
+        put :update, params: { id: 1,
+                               issue: { unregistered_watchers: ["captain@example.com",
+                                                                "another@email.com"],
+                                        notif_sent_to_unreg_watchers: false,
+                                        status_id: '5' # close issue
+                               } }
       end
     end
     expect(ActionMailer::Base.deliveries.size).to eq 3 # Only default notification to REGISTERED watchers
@@ -233,7 +233,7 @@ describe IssuesController, type: :controller do
     let!(:content_for_tracker_2) { "Feature request: the issue has been open !" }
 
     before do
-      Project.update({:unreg_watchers_all_trackers => false, :unreg_watchers_tracker_ids => [1, 2]})
+      Project.update({ :unreg_watchers_all_trackers => false, :unreg_watchers_tracker_ids => [1, 2] })
 
       UnregisteredWatchersNotification.create!(:issue_status_id => 1,
                                                :project_id => 1,
@@ -251,14 +251,14 @@ describe IssuesController, type: :controller do
 
       assert_difference 'ActionMailer::Base.deliveries.size', 3 do
         assert_difference 'Issue.count' do
-          post :create, params: {:project_id => 1,
-                                 :issue => {:tracker_id => 1,
-                                            :subject => 'This is the test_new issue',
-                                            :description => 'This is the description',
-                                            :priority_id => 5,
-                                            :unregistered_watchers => ["some_provider@example.com"],
-                                            :notif_sent_to_unreg_watchers => true,
-                                            :custom_field_values => {'2' => 'Value for field 2'}}}
+          post :create, params: { :project_id => 1,
+                                  :issue => { :tracker_id => 1,
+                                              :subject => 'This is the test_new issue',
+                                              :description => 'This is the description',
+                                              :priority_id => 5,
+                                              :unregistered_watchers => ["some_provider@example.com"],
+                                              :notif_sent_to_unreg_watchers => true,
+                                              :custom_field_values => { '2' => 'Value for field 2' } } }
         end
       end
 
@@ -276,14 +276,14 @@ describe IssuesController, type: :controller do
 
       assert_difference 'ActionMailer::Base.deliveries.size', 3 do
         assert_difference 'Issue.count' do
-          post :create, params: {:project_id => 1,
-                                 :issue => {:tracker_id => 2,
-                                            :subject => 'This is the test_new issue',
-                                            :description => 'This is the description',
-                                            :priority_id => 5,
-                                            :unregistered_watchers => ["some_provider@example.com"],
-                                            :notif_sent_to_unreg_watchers => true,
-                                            :custom_field_values => {'2' => 'Value for field 2'}}}
+          post :create, params: { :project_id => 1,
+                                  :issue => { :tracker_id => 2,
+                                              :subject => 'This is the test_new issue',
+                                              :description => 'This is the description',
+                                              :priority_id => 5,
+                                              :unregistered_watchers => ["some_provider@example.com"],
+                                              :notif_sent_to_unreg_watchers => true,
+                                              :custom_field_values => { '2' => 'Value for field 2' } } }
         end
       end
 
@@ -298,18 +298,18 @@ describe IssuesController, type: :controller do
 
     it "sends a standard notification for trackers without specified message" do
       ActionMailer::Base.deliveries.clear
-      Project.update({:unreg_watchers_all_trackers => true})
+      Project.update({ :unreg_watchers_all_trackers => true })
 
       assert_difference 'ActionMailer::Base.deliveries.size', 3 do
         assert_difference 'Issue.count' do
-          post :create, params: {:project_id => 1,
-                                 :issue => {:tracker_id => 3,
-                                            :subject => 'This is a new issue',
-                                            :description => 'This is the description',
-                                            :priority_id => 5,
-                                            :unregistered_watchers => ["some_provider_03@example.com"],
-                                            :notif_sent_to_unreg_watchers => true,
-                                            :custom_field_values => {'2' => 'Value for field 2'}}}
+          post :create, params: { :project_id => 1,
+                                  :issue => { :tracker_id => 3,
+                                              :subject => 'This is a new issue',
+                                              :description => 'This is the description',
+                                              :priority_id => 5,
+                                              :unregistered_watchers => ["some_provider_03@example.com"],
+                                              :notif_sent_to_unreg_watchers => true,
+                                              :custom_field_values => { '2' => 'Value for field 2' } } }
         end
       end
 
@@ -321,6 +321,40 @@ describe IssuesController, type: :controller do
         expect(part.body.raw_source).to include "Email body content for status 2"
       end
     end
+  end
+
+  it "creates a new issue with a single unregistered watcher (not an array)" do
+    assert_difference 'Issue.count' do
+      post :create, params: { :project_id => 1,
+                              :issue => { :tracker_id => 3,
+                                          :subject => 'This is the test_new issue',
+                                          :description => 'This is the description',
+                                          :priority_id => 5,
+                                          :unregistered_watchers => "captain@example.com",
+                                          :notif_sent_to_unreg_watchers => true,
+                                          :custom_field_values => { '2' => 'Value for field 2' } } }
+    end
+
+    issue = Issue.last
+    expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => issue.id)
+    expect(issue.unregistered_watchers.map(&:email)).to include "captain@example.com"
+  end
+
+  it "creates a new issue with multiple unregistered watchers separated by commas (not an array)" do
+    assert_difference 'Issue.count' do
+      post :create, params: { :project_id => 1,
+                              :issue => { :tracker_id => 3,
+                                          :subject => 'This is the test_new issue',
+                                          :description => 'This is the description',
+                                          :priority_id => 5,
+                                          :unregistered_watchers => "captain@example.com,boss@email.com,some_provider@example.com",
+                                          :notif_sent_to_unreg_watchers => true,
+                                          :custom_field_values => { '2' => 'Value for field 2' } } }
+    end
+
+    issue = Issue.last
+    expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => issue.id)
+    expect(issue.unregistered_watchers.map(&:email)).to include "captain@example.com"
   end
 
 end

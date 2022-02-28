@@ -8,10 +8,11 @@ class IssuesController < ApplicationController
 
     def set_unregistered_watchers
       @unregistered_watchers = []
-      if params[:issue] && params[:issue][:unregistered_watchers]
-        params[:issue][:unregistered_watchers].reject!(&:blank?)
-        params[:issue][:unregistered_watchers].each do |email|
-          @unregistered_watchers << UnregisteredWatcher.new(email: email)
+      if params[:issue] && params[:issue][:unregistered_watchers].present?
+        Array.wrap(params[:issue][:unregistered_watchers]).reject(&:blank?).each do |emails|
+          emails.split(',').each do |email|
+            @unregistered_watchers << UnregisteredWatcher.new(email: email.strip)
+          end
         end
         update_journal_with_unregistered_watchers unless @issue.new_record?
         @issue.unregistered_watchers = @unregistered_watchers
