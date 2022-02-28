@@ -354,7 +354,10 @@ describe IssuesController, type: :controller do
 
     issue = Issue.last
     expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => issue.id)
+    expect(issue.unregistered_watchers.map(&:email).size).to eq 3
     expect(issue.unregistered_watchers.map(&:email)).to include "captain@example.com"
+    expect(issue.unregistered_watchers.map(&:email)).to include "boss@email.com"
+    expect(issue.unregistered_watchers.map(&:email)).to include "some_provider@example.com"
   end
 
 end
