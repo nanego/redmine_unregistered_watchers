@@ -11,7 +11,7 @@
       <% current_unregistered_watchers = [] %>
 
       <%= labelled_fields_for :issue, @issue do |f| %>
-        <p id=issues_notify_unregistered_watchers>
+        <p id="issues_notify_unregistered_watchers" style="grid-row: 4;">
           <% current_unregistered_watchers = @issue.unregistered_watchers.map(&:email) %>
           <% select_options_for_unregistered_watchers = options_for_select(current_unregistered_watchers, :selected => current_unregistered_watchers) %>
           <%= f.select :unregistered_watchers, select_options_for_unregistered_watchers, { label: Setting['plugin_redmine_unregistered_watchers']['unregistered_watchers_label'] }, { :multiple => true } %>

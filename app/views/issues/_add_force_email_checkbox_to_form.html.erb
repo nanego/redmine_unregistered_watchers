@@ -4,7 +4,7 @@
 %>
 
   <%= labelled_fields_for :issue, @issue do |f| %>
-    <p id=issues_force_unregistered_watchers_notification>
+    <p id="issues_force_unregistered_watchers_notification" style="grid-row: 5;">
       <%= f.check_box :notif_sent_to_unreg_watchers, { :checked => true } %>
     </p>
   <% end %>
