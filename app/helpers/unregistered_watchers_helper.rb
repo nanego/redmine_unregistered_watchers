@@ -32,7 +32,14 @@ module UnregisteredWatchersHelper
   end
 
   def issue_attribute_value(issue, attribute)
-    issue.send(attribute.downcase.to_sym) if issue.respond_to?(attribute.downcase.to_sym)
+    if issue.respond_to?(attribute.downcase.to_sym)
+      value = issue.send(attribute.downcase.to_sym)
+      if value.is_a?(Date) || value.is_a?(Time)
+        format_date(value)
+      else
+        value
+      end
+    end
   end
 
   def magic_link_for_unregistered_watchers(issue, rule_id)

@@ -194,4 +194,20 @@ describe "IssuesHelperPatch" do
     assert_match 'error281.txt', show_detail(detail, true)
   end
 
+  describe "issue_attribute_value" do
+
+    it "displays the value as a string" do
+      issue = Issue.find(1)
+      expect(issue_attribute_value(issue, 'subject')).to eq "Cannot print recipes"
+    end
+
+    it "displays the value as a date" do
+      issue = Issue.find(1)
+      expect(format_date(issue.created_on)).to match /..\/..\/..../
+      expect(issue_attribute_value(issue, 'created_on')).to_not eq issue.created_on.to_s
+      expect(issue_attribute_value(issue, 'created_on')).to eq issue.created_on.strftime("%m/%d/%Y")
+    end
+
+  end
+
 end
