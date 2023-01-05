@@ -27,5 +27,17 @@ describe "ProjectsHelperPatch" do
     assert_select "a[href='/projects/1/settings/unregistered_watchers']", false
   end
 
+  it "should NOT display project_settings_tabs_with_unreg_watchers IF module is enabled and user does not have the permission" do
+      @request.session[:user_id] = 3
+      User.current = User.find(3)
+      Project.find(1).enable_module!("unregistered_watchers")
+      get :settings, params: { :id => 1 }
+      assert_select "a[href='/projects/1/settings/unregistered_watchers']", false
+  end
 
+  it "should display project_settings_tabs_with_unreg_watchers IF module is enabled and user has the permission" do
+      Project.find(1).enable_module!("unregistered_watchers")
+      get :settings, params: { :id => 1 }
+      assert_select "a[href='/projects/1/settings/unregistered_watchers']"
+  end
 end
