@@ -47,6 +47,18 @@ module PluginUnregisteredWatchers
 
     end
 
+    def resent_unregistered_watchers_journals
+      result = []
+
+      ids = UnregisteredWatchersHistory.re_sent_watchers_notification_issue(@issue.id).map(&:id)
+
+      @journaled_watchers_notifications = Journal.where(journalized_type: "UnregisteredWatchersHistory",  journalized_id: ids)
+      @journaled_watchers_notifications.each do |journal|
+        result  << journal
+      end
+      result
+    end
+
   end
 end
 

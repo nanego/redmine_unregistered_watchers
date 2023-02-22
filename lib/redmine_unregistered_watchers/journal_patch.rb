@@ -3,6 +3,7 @@ require_dependency 'journal'
 class Journal < ActiveRecord::Base
 
   attr_accessor :recipients
+  attr_accessor :history_id
 
   after_create_commit :send_notification_to_unregistered_watchers
 
@@ -17,3 +18,21 @@ class Journal < ActiveRecord::Base
   end
 
 end
+
+module PluginUnregisteredWatchers
+  module JournalPatch    
+    # Patch to avoid overriding journalized_attribute_names and to avoid using acts_as_customizable
+    def start
+      ## start patch
+      if journalized_type == "UnregisteredWatchersHistory"
+        self
+      else
+        # end patch
+        super
+      end
+
+    end
+  end
+end
+
+Journal.prepend PluginUnregisteredWatchers::JournalPatch

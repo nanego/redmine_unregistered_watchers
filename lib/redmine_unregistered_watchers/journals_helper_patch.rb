@@ -2,8 +2,9 @@ require_dependency 'journals_helper'
 
 module JournalsHelper
   def render_read_only_mail_notification(issue, journal, options = {})
+    recipients = journal.persisted? ? journal.journalized.to : journal.recipients
     content = ''
-    content << content_tag('div', simple_format("Destinataires : #{journal.recipients}"), :class => 'content')
+    content << content_tag('div', simple_format("Destinataires : #{recipients}"), :class => 'content')
     links = []
     if !journal.notes.blank?
       links << link_to(l(:button_quote),

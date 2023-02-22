@@ -27,6 +27,7 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
   requires_redmine_plugin :redmine_base_select2, :version_or_higher => '4.0.0'
   project_module :unregistered_watchers do
     permission :set_unregistered_watchers_to_issues, {  }
+    permission :resend_unregistered_watchers_notification, { :issues => [:resend_last_notification] }
   end
   settings :default => { 'emails_signature_for_unregistered_watchers' => "",
                          'emails_footer_for_unregistered_watchers' => "",

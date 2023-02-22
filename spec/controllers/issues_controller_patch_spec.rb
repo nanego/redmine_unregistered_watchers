@@ -227,6 +227,51 @@ describe IssuesController, type: :controller do
 
   end
 
+  describe "Resend notification to the watchers" do
+    
+    before do
+      ActiveRecord::Base.connection.execute("insert into unregistered_watchers_histories values (1, 3, 1, 'the issue has been closed !' , 'captain@example.com', '[project_test] Feature request', '2023-02-21 07:54:49.957779', '2023-02-21 07:54:49.957779')")
+    end
+
+    it "Should not show link (Resend this notification) without permission" do
+      User.current = User.find(3)
+      @request.session[:user_id] = 3
+      get :show, params: { :id => 1 }
+
+      expect(response.body).not_to have_content('Resend this email')
+    end
+
+    it "Should show link (Resend this notification) with permission" do
+      User.current = User.find(3)
+      @request.session[:user_id] = 3
+      Role.find(2).add_permission!(:resend_unregistered_watchers_notification)
+      get :show, params: { :id => 1 }
+      expect(response.body).to have_content('Resend this email')
+    end
+
+    it "Should resend the notification to the watchers" do
+      User.current = User.find(3)
+      @request.session[:user_id] = 3
+      Role.find(2).add_permission!(:resend_unregistered_watchers_notification)
+
+      ActionMailer::Base.deliveries.clear
+      last_history =  ActiveRecord::Base.connection.execute('select * from unregistered_watchers_histories').first
+
+      expect do
+        post :resend_watchers_notification, params: { issue_id: 1, history_id: last_history["id"] }
+      end.to change { Journal.count }.by(1)
+      .and change { ActionMailer::Base.deliveries.size }.by(1)
+
+      expect(response).to redirect_to("/issues/1")
+      email = ActionMailer::Base.deliveries.last
+
+      expect(Journal.last.journalized_type).to eq "UnregisteredWatchersHistory"
+      expect(Journal.last.journalized_id).to eq last_history["id"]
+      expect(Journal.last.notes).to eq last_history["content"]
+
+    end
+  end
+
   describe "messages by tracker" do
 
     let!(:content_for_tracker_1) { "[Bug] the issue has been open and assigned to you !" }
