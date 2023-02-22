@@ -18,3 +18,7 @@ en:
   field_notif_sent_to_unreg_watchers: "Send a notification by email to the watchers"
   setting_emails_signature_for_unregistered_watchers: "Signature added to every emails before footer"
   permission_set_unregistered_watchers_to_issues: "Set unregistered watchers"
+  resend_this_mail: "Resend this email"
+  automatic_mail_sent_to_watchers: "Automatic mail sent to unregistered watchers ago "
+  label_watchers_notifications_resent: "Mail to notified persons resent by %{user} ago "
+  permission_resend_unregistered_watchers_notification: "Resend unregistered watchers notification"

@@ -18,3 +18,7 @@ fr:
   field_notif_sent_to_unreg_watchers: "Envoyer une notification par email au demandeur "
   setting_emails_signature_for_unregistered_watchers: "Signature ajoutée à la fin de chaque mail, avant le pied de page"
   permission_set_unregistered_watchers_to_issues: "Saisir les observateurs non-inscrits"
+  resend_this_mail: "Réémettre ce mail"
+  automatic_mail_sent_to_watchers: "Mail automatique envoyé aux adresses des personnes notifiées il y a "
+  label_watchers_notifications_resent: "Mail aux personnes notifiées renvoyé par %{user} il y a "
+  permission_resend_unregistered_watchers_notification: "Ré-émettre la notification d'observateurs non inscrits"
