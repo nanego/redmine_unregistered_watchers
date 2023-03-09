@@ -42,3 +42,4 @@
 #tab-content-unregistered_watchers table td.messages table th {
     text-align: center;
 }
+.icon-notified { background-image: url(../images/email_to_friend.png); }

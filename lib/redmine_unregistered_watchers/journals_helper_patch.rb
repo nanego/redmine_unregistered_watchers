@@ -1,7 +1,7 @@
 require_dependency 'journals_helper'
 
 module JournalsHelper
-  def render_read_only_mail_notification(issue, journal, options = {})
+  def render_UnregisteredWatchersHistory_in_issue_history(issue, journal, options = {})
     recipients = journal.persisted? ? journal.journalized.to : journal.recipients
     content = ''
     content << content_tag('div', simple_format("Destinataires : #{recipients}"), :class => 'content')
@@ -24,3 +24,4 @@ module JournalsHelper
                 class: css_classes)
   end
 end
+ 

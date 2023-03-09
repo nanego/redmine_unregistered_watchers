@@ -20,5 +20,7 @@ en:
   permission_set_unregistered_watchers_to_issues: "Set unregistered watchers"
   resend_this_mail: "Resend this email"
   automatic_mail_sent_to_watchers: "Automatic mail sent to unregistered watchers ago "
-  label_watchers_notifications_resent: "Mail to notified persons resent by %{user} ago "
+  label_UnregisteredWatchersHistory_resent: "Mail to notified persons resent by %{user} ago "
   permission_resend_unregistered_watchers_notification: "Resend unregistered watchers notification"
+  label_see_the_content_of_the_email: "See the content of the email"
+  label_hide_the_content_of_the_email: "Hide the content of the email"

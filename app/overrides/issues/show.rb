@@ -10,7 +10,7 @@ Deface::Override.new :virtual_path  => 'issues/show',
                      :text          => <<EOS
 <%
   @issue.unregistered_watchers_histories.each do |mail|
-    @journals << Journal.new(:journalized => @issue, 
+    @journals << Journal.new(:journalized => mail, 
                              :user => nil, 
                              :notes => mail.content, 
                              :recipients => mail.to,
