@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe "UnregisteredWatchersHelper" do
   include UnregisteredWatchersHelper
+  include Redmine::I18n
 
   fixtures :issues, :journals, :journal_details, :projects, :users, :enabled_modules, :enumerations,
            :trackers, :issue_statuses, :versions, :custom_fields, :custom_values, :custom_fields_projects,
@@ -42,6 +43,16 @@ describe "UnregisteredWatchersHelper" do
         body = "{tracker} {project} → {fixed_version}"
         issue_1.fixed_version_id = 3
         expect(email_body_with_variables(issue_1, body)).to eq "Bug eCookbook → 2.0"
+      end
+
+      it "can display core-field with date only" do
+        body = "{tracker}: Issue updated at {updated_on}"
+        expect(email_body_with_variables(issue_1, body)).to match /^Bug: Issue updated at \d{2}\/\d{2}\/\d{4}$/
+      end
+
+      it "can display core-field with date and time" do
+        body = "{tracker}: Issue updated at {updated_on_with_time}"
+        expect(email_body_with_variables(issue_1, body)).to match /^Bug: Issue updated at \d{2}\/\d{2}\/\d{4} \d{2}:\d{2} ..$/
       end
     end
 

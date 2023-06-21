@@ -22,6 +22,10 @@ Examples:
     {fixed_version}
     {created_on}
     etc.
+    
+    To display dates with time, just add "with_time" after the attribute name, like this:
+    {created_on_with_time}
+    {updated_on_with_time}
 
     Custom fields:
     by id: {cf_5}
@@ -31,7 +35,7 @@ Examples:
     {last_note}
     {magic_link_*magic-link-rule-id*} (Only available if the magic-link plugin is installed)
 
-Previous syntax using greater and less signs is deprecated but still supported (like <<tracker>> or <<last_note>>).
+The previous syntax using greater and less signs (like <<tracker>> or <<last_note>>) is deprecated and does not provide as much attributes.
  
 Installation
 ------------

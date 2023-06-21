@@ -13,6 +13,8 @@ module UnregisteredWatchersHelper
         custom_field_value_by_name(issue, attribute.delete_prefix("cf_"))
       when /^magic_link_\d/
         magic_link_for_unregistered_watchers(issue, attribute.delete_prefix("magic_link_"))
+      when /[[:word:]]*_with_time$/
+        issue_attribute_value(issue, attribute.delete_suffix("_with_time"), with_time: true)
       else
         issue_attribute_value(issue, attribute)
       end
@@ -31,11 +33,11 @@ module UnregisteredWatchersHelper
     cf.present? ? issue.custom_field_value(cf) : ""
   end
 
-  def issue_attribute_value(issue, attribute)
+  def issue_attribute_value(issue, attribute, with_time: false)
     if issue.respond_to?(attribute.downcase.to_sym)
       value = issue.send(attribute.downcase.to_sym)
       if value.is_a?(Date) || value.is_a?(Time)
-        format_date(value)
+        with_time ? format_time(value) : format_date(value)
       else
         value
       end
