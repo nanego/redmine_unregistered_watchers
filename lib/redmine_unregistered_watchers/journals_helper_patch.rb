@@ -2,7 +2,7 @@ require_dependency 'journals_helper'
 
 module JournalsHelper
   def render_UnregisteredWatchersHistory_in_issue_history(issue, journal, options = {})
-    recipients = journal.persisted? ? journal.journalized.to : journal.recipients
+    recipients = journal.is_a_resent_notification? ? journal.journalized.to : journal.recipients
     content = ''
     content << content_tag('div', simple_format("Destinataires : #{recipients}"), :class => 'content')
     links = []
@@ -24,4 +24,3 @@ module JournalsHelper
                 class: css_classes)
   end
 end
- 

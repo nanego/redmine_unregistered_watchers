@@ -18,7 +18,7 @@ Deface::Override.new :virtual_path  => 'issues/show',
                              :private_notes => false, 
                              :created_on => mail.created_at)
   end
-  @journals = @journals + resent_unregistered_watchers_journals
+  @journals = @journals + Journal.where(journalized: UnregisteredWatchersHistory.where(issue_id: @issue.id))
   @journals.sort_by!(&:created_on)
   @journals.each_with_index {|j, i| j.indice = i + 1}
   @journals.reverse! if User.current.wants_comments_in_reverse_order?

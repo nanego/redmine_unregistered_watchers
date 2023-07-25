@@ -17,7 +17,7 @@ module PluginUnregisteredWatchers
         if value.present? # unregistered_watchers added to the issue
 
           value = value.split(',')
-          list = content_tag("span", h(value.join(', ')), class: "journal_details", data: {detail_id: detail.id})
+          list = content_tag("span", h(value.join(', ')), class: "journal_details", data: { detail_id: detail.id })
 
           if no_html
             value.join(', ')
@@ -29,7 +29,7 @@ module PluginUnregisteredWatchers
         elsif old_value.present? # unregistered_watchers removed from the issue
 
           old_value = old_value.split(',')
-          list = content_tag("del", h(old_value.join(', ')), class: "journal_details", data: {detail_id: detail.id})
+          list = content_tag("del", h(old_value.join(', ')), class: "journal_details", data: { detail_id: detail.id })
 
           if no_html
             old_value.join(', ')
@@ -45,18 +45,6 @@ module PluginUnregisteredWatchers
         super
       end
 
-    end
-
-    def resent_unregistered_watchers_journals
-      result = []
-
-      ids = UnregisteredWatchersHistory.re_sent_watchers_notification_issue(@issue.id).map(&:id)
-
-      @journaled_watchers_notifications = Journal.where(journalized_type: "UnregisteredWatchersHistory",  journalized_id: ids)
-      @journaled_watchers_notifications.each do |journal|
-        result  << journal
-      end
-      result
     end
 
   end

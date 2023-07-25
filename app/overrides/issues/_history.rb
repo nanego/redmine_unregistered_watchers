@@ -3,28 +3,29 @@ if !Redmine::Plugin.installed?(:redmine_notified)
   Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                        :name          => 'unregistered_watchers_notifs_are_not_editable',
                        :replace       => 'erb[loud]:contains("render_notes")',
-                       :text          => <<'EOS'
+                       :text          => <<-EOS
   <% if journal.journalized_type == "Issue" %>
     <%= render_notes(issue, journal, :reply_links => reply_links) unless journal.notes.blank? %>
   <% else %>
     <% options = [:reply_links => reply_links] %>
-    <%= send "render_#{journal.journalized_type}_in_issue_history" , issue, journal, *options unless journal.notes.blank? %>
+    <%= send "render_UnregisteredWatchersHistory_in_issue_history" , issue, journal, *options unless journal.notes.blank? %>
   <% end %>
-EOS
+  EOS
 
   Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                        :name          => 'unregistered_watchers_notifs_has_no_actions',
                        :replace       => 'erb[loud]:contains("render_journal_actions")',
-                       :text          => <<EOS
+                       :text          => <<-EOS
   <% if journal.journalized_type == "Issue" %>
     <%= render_journal_actions(issue, journal, :reply_links => reply_links) %>
   <% end %>
-EOS
+  EOS
+
   Deface::Override.new :virtual_path  => 'issues/tabs/_history',
-                         :name          => 'add-container-to-mail-notifications',
-                         :original      => '68e145deae6a29591c73e2ca568cbac07e2fdbd0',
-                         :surround      => "div:contains(id, 'change-')",
-                         :text          => <<-EOS
+                       :name          => 'add-container-to-mail-notifications',
+                       :original      => '68e145deae6a29591c73e2ca568cbac07e2fdbd0',
+                       :surround      => "div:contains(id, 'change-')",
+                       :text          => <<-EOS
     <% if journal.journalized_type == "Issue" %>
       <%= render_original %>
     <% else %> 
@@ -33,34 +34,15 @@ EOS
       </div>
     <% end %>
   EOS
+
 end
 
 Deface::Override.new :virtual_path  => 'issues/tabs/_history',
                      :name          => 'unregistered_watchers_notifs_have_no_author',
                      :replace       => 'erb[loud]:contains("authoring journal.created_on")',
-                     :text          => <<'EOS'
-<% if journal.journalized_type == "Issue" %>
-  <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
-<% else %>
-  <% label_text = "label_#{journal.journalized_type}_resent" %>
-  <% label = journal.persisted? ? l(label_text, user: link_to_user(journal.user)).html_safe : l(:automatic_mail_sent_to_watchers) %>
-  <%= label %>
-  <%= time_tag(journal.created_on).html_safe %>
-  <% mail_id = "journal-"+journal.object_id.to_s+"-notes" %>
-  <% link_id = "link-to-mail-notification-"+journal.object_id.to_s %>
-  <%= content_tag(:span) { ('(' + content_tag(:a, l(:label_see_the_content_of_the_email), :href => "#", id: link_id, :onclick => "toggle_mail_details(event, '"+mail_id+"','"+link_id+"')" ) + ')').html_safe } %>
-  <% if !journal.persisted? && User.current.allowed_to?(:resend_unregistered_watchers_notification, @project) %><%= link_to l(:resend_this_mail), resend_watchers_notification_path(issue_id: @issue.id, history_id: journal.history_id), :method => :post, :class => "icon icon-notified" %><% end %>
-<% end %> 
-<script type="text/javascript">
-  var toggle_mail_details = function(event, mail_id, link_id) {
-    blockEventPropagation(event);
-    $('#'+mail_id).toggleClass('hidden');
-    if($('#'+mail_id).is(':visible')) {
-      $('#'+link_id).text('<%= l(:label_hide_the_content_of_the_email) %>')
-    }else{
-      $('#'+link_id).text('<%= l(:label_see_the_content_of_the_email) %>')
-    };
-    return false;
-  }
-</script>
-EOS
+                     :partial       => "issues/journal_authoring"
+
+Deface::Override.new :virtual_path  => 'issues/tabs/_history',
+                     :name          => 'unregistered_watchers_notifs_contextual_actions',
+                     :insert_top    => 'div.contextual',
+                     :partial       => "issues/journal_contextual_actions"
