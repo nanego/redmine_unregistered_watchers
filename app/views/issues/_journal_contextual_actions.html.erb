@@ -1,5 +1,0 @@
-<% if !journal.persisted? && User.current.allowed_to?(:resend_unregistered_watchers_notification, @project) %>
-  <%= link_to l(:resend_this_mail),
-              resend_unregistered_watchers_notification_path(issue_id: @issue.id, history_id: journal.history_id),
-              method: :post, class: "icon icon-notified" %>
-<% end %>

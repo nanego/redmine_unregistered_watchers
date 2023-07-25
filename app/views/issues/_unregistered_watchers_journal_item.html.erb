@@ -1,0 +1,47 @@
+<div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
+  <div id="note-<%= journal.indice %>">
+
+    <div class="contextual">
+      <span class="journal-actions">
+        <% if !journal.persisted? && User.current.allowed_to?(:resend_unregistered_watchers_notification, @project) %>
+          <%= link_to l(:resend_this_mail),
+                      resend_unregistered_watchers_notification_path(issue_id: @issue.id, history_id: journal.history_id),
+                      method: :post, class: "icon icon-notified" %>
+        <% end %>
+      </span>
+      <a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
+    </div>
+
+    <h4 class='note-header'>
+      <% if journal.is_a_resent_notification? %>
+        <%= l(:mail_resent_to_unregistered_watchers, user: link_to_user(journal.user), age: time_tag(journal.created_on)).html_safe %>
+      <% else %>
+        <%= l(:automatic_mail_sent_to_watchers, age: time_tag(journal.created_on)).html_safe %>
+      <% end %>
+      <% mail_id = "journal-" + journal.object_id.to_s + "-notes" %>
+      <% link_id = "link-to-mail-notification-" + journal.object_id.to_s %>
+
+      <%= content_tag(:span) do
+        ('(' + content_tag(:a, l(:label_show_content_of_the_email), href: "#", id: link_id,
+                           onclick: "toggle_unreg_watchers_mail_details(event, '" + mail_id + "','" + link_id + "')") + ')').html_safe
+      end %>
+    </h4>
+
+    <%= render_UnregisteredWatchersHistory_in_issue_history(issue, journal) unless journal.notes.blank? %>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+    var toggle_unreg_watchers_mail_details = function (event, mail_id, link_id) {
+        blockEventPropagation(event)
+        $('#' + mail_id).toggleClass('hidden')
+        if ($('#' + mail_id).is(':visible')) {
+            $('#' + link_id).text('<%= l(:label_hide_content_of_the_email) %>')
+        } else {
+            $('#' + link_id).text('<%= l(:label_show_content_of_the_email) %>')
+        }
+        return false
+    }
+</script>
+
