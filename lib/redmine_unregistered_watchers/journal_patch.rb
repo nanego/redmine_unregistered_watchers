@@ -18,7 +18,7 @@ class Journal < ActiveRecord::Base
   end
 
   def is_a_resent_notification?
-    self.journalized.is_a?(UnregisteredWatchersHistory)
+    self.persisted? && self.journalized.is_a?(UnregisteredWatchersHistory)
   end
 
 end
@@ -27,7 +27,7 @@ module PluginUnregisteredWatchers
   module JournalPatch
     # Patch to avoid overriding journalized_attribute_names and to avoid using acts_as_customizable
     def start
-      if self.is_a_resent_notification?
+      if journalized_type == "UnregisteredWatchersHistory"
         self
       else
         super
