@@ -20,7 +20,6 @@ Deface::Override.new :virtual_path  => 'issues/show',
   end
   @journals = @journals + Journal.where(journalized: UnregisteredWatchersHistory.where(issue_id: @issue.id))
   @journals.sort_by!(&:created_on)
-  @journals.each_with_index {|j, i| j.indice = i + 1}
   @journals.reverse! if User.current.wants_comments_in_reverse_order?
 %>
 EOS
