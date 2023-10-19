@@ -1,8 +1,9 @@
 require "spec_helper"
 
 describe ProjectsController, :type => :controller do
-    fixtures :unregistered_watchers, :unregistered_watchers_notifications,
-                :users, :issues, :trackers, :projects
+
+  fixtures :unregistered_watchers, :unregistered_watchers_notifications,
+           :users, :issues, :trackers, :projects
 
   before do
     @request.session[:user_id] = 1
@@ -33,7 +34,7 @@ describe ProjectsController, :type => :controller do
       new_pro = Project.last
 
       expect(new_pro.unregistered_watchers_notifications.count).to eq(4)
-      expect(new_pro.unreg_watchers_tracker_ids).to eq( [1, nil] )
+      expect(new_pro.unreg_watchers_tracker_ids).to eq([1, nil])
       expect(new_pro.unreg_watchers_all_trackers).to eq(false)
       expect(new_pro.unregistered_watchers_notifications.first.email_body).to eq('hello01')
       expect(new_pro.unregistered_watchers_notifications.last.email_body).to eq('hello12')

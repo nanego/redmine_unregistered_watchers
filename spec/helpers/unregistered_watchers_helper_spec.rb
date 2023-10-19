@@ -64,7 +64,8 @@ describe "UnregisteredWatchersHelper" do
 
       it "does not display private notes" do
         Journal.create(journalized: issue_1, private_notes: true, notes: "This notes is private")
-        expect(issue_1.last_notes).to eq "This notes is private"
+        last_notes_including_private_notes = issue_1.journals.reorder(:id => :desc).first.try(:notes)
+        expect(last_notes_including_private_notes).to eq "This notes is private"
 
         body_with_last_note = email_body_with_variables(issue_1, "Last public note: <<last_note>>")
         expect(body_with_last_note).to eq "Last public note: Some notes with Redmine links: #2, r2."

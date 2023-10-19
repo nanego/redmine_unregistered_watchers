@@ -1,7 +1,6 @@
 require "spec_helper"
 
-describe "ProjectsHelperPatch" do
-  include RSpec::Rails::ControllerExampleGroup
+describe "ProjectsHelperPatch", type: :controller do
 
   fixtures :projects, :enabled_modules
 
