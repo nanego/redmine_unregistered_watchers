@@ -1,6 +1,6 @@
 require_dependency 'queries_helper'
 
-module PluginUnregisteredWatchers
+module RedmineUnregisteredWatchers
   module QueriesHelperPatch
 
     def column_value(column, issue, values)
@@ -15,6 +15,6 @@ module PluginUnregisteredWatchers
 end
 
 QueriesHelper.include IssuesHelper
-QueriesHelper.prepend PluginUnregisteredWatchers::QueriesHelperPatch
+QueriesHelper.prepend RedmineUnregisteredWatchers::QueriesHelperPatch
 ActionView::Base.prepend QueriesHelper
 IssuesController.prepend QueriesHelper

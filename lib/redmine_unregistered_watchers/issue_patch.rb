@@ -1,15 +1,17 @@
 require_dependency 'issue'
 
-class Issue < ActiveRecord::Base
+module RedmineUnregisteredWatchers::IssuePatch
 
-  include Redmine::SafeAttributes
+  def self.included(base) # :nodoc:
+    base.class_eval do
+      include Redmine::SafeAttributes
 
-  has_many :unregistered_watchers
-  has_many :unregistered_watchers_histories
+      has_many :unregistered_watchers
+      has_many :unregistered_watchers_histories
 
-  safe_attributes 'notif_sent_to_unreg_watchers'
-
-  after_create :send_notification_to_unregistered_watchers
+      safe_attributes 'notif_sent_to_unreg_watchers'
+    end
+  end
 
   # Add missing useful method (should be in Redmine core)
   def visible_custom_fields(user=nil)
@@ -46,6 +48,10 @@ class Issue < ActiveRecord::Base
     else
       return true
     end
-
   end
+end
+
+class Issue < ActiveRecord::Base
+  include RedmineUnregisteredWatchers::IssuePatch
+  after_create :send_notification_to_unregistered_watchers
 end

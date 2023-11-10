@@ -1,7 +1,7 @@
 require_dependency 'issues_helper'
 
-module PluginUnregisteredWatchers
-  module IssuesHelper
+module RedmineUnregisteredWatchers
+  module IssuesHelperPatch
 
     # Returns the textual representation of a single journal detail
     # Core properties are 'attr', 'attachment' or 'cf' : this patch specify how to display 'unregistered_watchers' journal details
@@ -50,5 +50,5 @@ module PluginUnregisteredWatchers
   end
 end
 
-IssuesHelper.prepend PluginUnregisteredWatchers::IssuesHelper
+IssuesHelper.prepend RedmineUnregisteredWatchers::IssuesHelperPatch
 ActionView::Base.prepend IssuesHelper

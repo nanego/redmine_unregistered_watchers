@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'redmine_unregistered_watchers/issue_query_patch'
+require_relative '../../lib/redmine_unregistered_watchers/issue_query_patch'
 
 describe IssueQuery do
   describe 'filters and columns' do

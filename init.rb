@@ -1,19 +1,5 @@
 require 'redmine'
-require_dependency 'redmine_unregistered_watchers/hooks'
-
-ActiveSupport::Reloader.to_prepare do
-  require_dependency 'redmine_unregistered_watchers/issue_patch'
-  require_dependency 'redmine_unregistered_watchers/issue_statuses_patch'
-  require_dependency 'redmine_unregistered_watchers/issue_query_patch'
-  require_dependency 'redmine_unregistered_watchers/issues_helper_patch'
-  require_dependency 'redmine_unregistered_watchers/issues_controller_patch'
-  require_dependency 'redmine_unregistered_watchers/project_patch'
-  require_dependency 'redmine_unregistered_watchers/projects_helper_patch'
-  require_dependency 'redmine_unregistered_watchers/journal_patch'
-  require_dependency 'redmine_unregistered_watchers/journals_helper_patch'
-  require_dependency 'redmine_unregistered_watchers/mailer_patch'
-  require_dependency 'redmine_unregistered_watchers/queries_helper_patch'
-end
+require_relative 'lib/redmine_unregistered_watchers/hooks'
 
 Redmine::Plugin.register :redmine_unregistered_watchers do
   name 'Redmine Unregistered Watchers plugin'

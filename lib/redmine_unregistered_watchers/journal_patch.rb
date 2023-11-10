@@ -23,7 +23,7 @@ class Journal < ActiveRecord::Base
 
 end
 
-module PluginUnregisteredWatchers
+module RedmineUnregisteredWatchers
   module JournalPatch
     # Patch to avoid overriding journalized_attribute_names and to avoid using acts_as_customizable
     def start
@@ -35,4 +35,4 @@ module PluginUnregisteredWatchers
     end
   end
 end
-Journal.prepend PluginUnregisteredWatchers::JournalPatch
+Journal.prepend RedmineUnregisteredWatchers::JournalPatch

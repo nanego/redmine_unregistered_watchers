@@ -1,6 +1,6 @@
 require_dependency 'journals_helper'
 
-module JournalsHelper
+module RedmineUnregisteredWatchers::JournalsHelperPatch
   def render_UnregisteredWatchersHistory_in_issue_history(issue, journal, options = {})
     recipients = journal.is_a_resent_notification? ? journal.journalized.to : journal.recipients
     content = ''
@@ -24,3 +24,6 @@ module JournalsHelper
                 class: css_classes)
   end
 end
+
+JournalsHelper.prepend RedmineUnregisteredWatchers::JournalsHelperPatch
+ActionView::Base.prepend JournalsHelper

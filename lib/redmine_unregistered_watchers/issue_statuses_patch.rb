@@ -1,5 +1,11 @@
-require_dependency 'issue_status'
+module RedmineUnregisteredWatchers::IssueStatusesPatch
 
-class IssueStatus < ActiveRecord::Base
-  has_many :unregistered_watchers_notifications
+  def self.included(base)
+    # :nodoc:
+    base.class_eval do
+      has_many :unregistered_watchers_notifications
+    end
+  end
 end
+
+IssueStatus.send(:include, RedmineUnregisteredWatchers::IssueStatusesPatch)

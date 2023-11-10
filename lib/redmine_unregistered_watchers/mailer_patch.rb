@@ -1,6 +1,10 @@
 require 'mailer'
 include UnregisteredWatchersHelper
 
+module RedmineUnregisteredWatchers::MailerPatch
+
+end
+
 class Mailer < ActionMailer::Base
 
   def self.deliver_issue_to_unregistered_watchers(issue, notif)

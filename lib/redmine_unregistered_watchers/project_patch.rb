@@ -23,7 +23,7 @@ class Project < ActiveRecord::Base
 
 end
 
-module PluginUnregisteredWatchers
+module RedmineUnregisteredWatchers
   module ProjectPatch
     # Copies unregistered_watchers_notifications from +project+
     def copy_unregistered_watchers(project)
@@ -63,4 +63,4 @@ module PluginUnregisteredWatchers
   end
 end
 
-Project.prepend PluginUnregisteredWatchers::ProjectPatch
+Project.prepend RedmineUnregisteredWatchers::ProjectPatch

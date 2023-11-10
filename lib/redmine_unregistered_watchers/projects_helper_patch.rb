@@ -1,7 +1,7 @@
 require_dependency 'projects_helper'
 
-module PluginUnregisteredWatchers
-  module ProjectsHelper
+module RedmineUnregisteredWatchers
+  module ProjectsHelperPatch
     def project_settings_tabs
       tabs = super
       if @project.module_enabled?("unregistered_watchers") && User.current.allowed_to?(:set_unregistered_watchers_to_issues, @project)
@@ -13,5 +13,5 @@ module PluginUnregisteredWatchers
   end
 end
 
-ProjectsHelper.prepend PluginUnregisteredWatchers::ProjectsHelper
+ProjectsHelper.prepend RedmineUnregisteredWatchers::ProjectsHelperPatch
 ActionView::Base.send(:include, ProjectsHelper)

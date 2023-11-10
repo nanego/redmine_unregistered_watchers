@@ -1,7 +1,7 @@
 require "spec_helper"
 require "active_support/testing/assertions"
-require 'redmine_unregistered_watchers/issues_controller_patch.rb'
-require 'redmine_unregistered_watchers/issue_patch.rb'
+require_relative '../../lib/redmine_unregistered_watchers/issues_controller_patch.rb'
+require_relative '../../lib/redmine_unregistered_watchers/issue_patch.rb'
 
 describe IssuesController, type: :controller do
   render_views

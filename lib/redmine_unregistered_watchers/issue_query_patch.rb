@@ -1,6 +1,6 @@
 require_dependency 'issue_query'
 
-module PluginUnregisteredWatchers
+module RedmineUnregisteredWatchers
   module IssueQueryPatch
     def initialize_available_filters
       super
@@ -14,7 +14,7 @@ module PluginUnregisteredWatchers
 end
 
 class IssueQuery < Query
-  prepend PluginUnregisteredWatchers::IssueQueryPatch
+  prepend RedmineUnregisteredWatchers::IssueQueryPatch
 
   self.available_columns << QueryColumn.new(:unregistered_watchers, groupable: false)
 
