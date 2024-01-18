@@ -45,7 +45,7 @@ describe IssuesController, type: :controller do
     Setting["plugin_redmine_unregistered_watchers"]["emails_footer_for_unregistered_watchers"] = "You received this message because you have been registered as watcher on this issue."
   end
 
-  let(:sent_mail_key) { Redmine::VERSION::MAJOR >= 5 ? 'to' : sent_mail_key }
+  let(:sent_mail_key) { Redmine::VERSION::MAJOR >= 5 ? 'to' : 'bcc' }
   it "should send a notification to unregistered watchers after create" do
     ActionMailer::Base.deliveries.clear
 
