@@ -174,9 +174,14 @@ describe "IssuesHelperPatch" do
   end
 
   it "should IssuesHelper#show_detail should show old and new values with a estimated hours attribute" do
+    # Redmine 5 timespan_format by default is minutes
+    default_format = Setting.timespan_format
+    Setting.timespan_format = 'decimal'
     detail = JournalDetail.new(:property => 'attr', :prop_key => 'estimated_hours', :old_value => '5', :value => '6.3')
     assert_match '5.00', show_detail(detail, true)
     assert_match '6.30', show_detail(detail, true)
+    Setting.timespan_format = default_format
+
   end
 
   it "should IssuesHelper#show_detail should show old and new values with a custom field" do
