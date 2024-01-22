@@ -45,7 +45,8 @@ describe IssuesController, type: :controller do
     Setting["plugin_redmine_unregistered_watchers"]["emails_footer_for_unregistered_watchers"] = "You received this message because you have been registered as watcher on this issue."
   end
 
-  let(:sent_mail_key) { Redmine::VERSION::MAJOR >= 5 ? 'to' : 'bcc' }
+  let!(:recipient_field) { Redmine::VERSION::MAJOR >= 5 ? 'to' : 'bcc' }
+
   it "should send a notification to unregistered watchers after create" do
     ActionMailer::Base.deliveries.clear
 
@@ -70,20 +71,20 @@ describe IssuesController, type: :controller do
 
     default_mail = ActionMailer::Base.deliveries.second
 
-    expect(default_mail[sent_mail_key].value).to include User.find(2).mail
-    expect(default_mail[sent_mail_key].value).to_not include "captain@example.com"
-    expect(default_mail[sent_mail_key].value).to_not include "boss@email.com"
-    expect(default_mail[sent_mail_key].value).to_not include "some_provider@example.com"
+    expect(default_mail[recipient_field].value).to include User.find(2).mail
+    expect(default_mail[recipient_field].value).to_not include "captain@example.com"
+    expect(default_mail[recipient_field].value).to_not include "boss@email.com"
+    expect(default_mail[recipient_field].value).to_not include "some_provider@example.com"
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include "has been reported by"
       expect(part.body.raw_source).to_not include "Email body content"
     end
 
     unregistered_watchers_email = ActionMailer::Base.deliveries.first
-    expect(unregistered_watchers_email[sent_mail_key].value).to_not include User.find(2).mail
-    expect(unregistered_watchers_email[sent_mail_key].value).to include "captain@example.com"
-    expect(unregistered_watchers_email[sent_mail_key].value).to include "boss@email.com"
-    expect(unregistered_watchers_email[sent_mail_key].value).to include "some_provider@example.com"
+    expect(unregistered_watchers_email[recipient_field].value).to_not include User.find(2).mail
+    expect(unregistered_watchers_email[recipient_field].value).to include "captain@example.com"
+    expect(unregistered_watchers_email[recipient_field].value).to include "boss@email.com"
+    expect(unregistered_watchers_email[recipient_field].value).to include "some_provider@example.com"
     unregistered_watchers_email.parts.each do |part|
       expect(part.body.raw_source).to_not include "has been reported by"
       expect(part.body.raw_source).to include "Email body content for status 2"
@@ -113,9 +114,9 @@ describe IssuesController, type: :controller do
 
     expect(ActionMailer::Base.deliveries.size).to eq 3 # Only default notification to REGISTERED watchers
     default_mail = ActionMailer::Base.deliveries.second
-    expect(default_mail[sent_mail_key].value).to include(User.find(2).mail)
-    expect(default_mail[sent_mail_key].value).to_not include("captain@example.com")
-    expect(default_mail[sent_mail_key].value).to_not include("boss@email.com")
+    expect(default_mail[recipient_field].value).to include(User.find(2).mail)
+    expect(default_mail[recipient_field].value).to_not include("captain@example.com")
+    expect(default_mail[recipient_field].value).to_not include("boss@email.com")
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include("has been reported by")
       expect(part.body.raw_source).to_not include("Email body content")
@@ -147,17 +148,17 @@ describe IssuesController, type: :controller do
     default_mail = ActionMailer::Base.deliveries.second
     unregistered_watchers_email = ActionMailer::Base.deliveries.first
 
-    expect(default_mail[sent_mail_key].value).to include User.find(2).mail
-    expect(default_mail[sent_mail_key].value).to_not include "captain@example.com"
-    expect(default_mail[sent_mail_key].value).to_not include "boss@email.com"
+    expect(default_mail[recipient_field].value).to include User.find(2).mail
+    expect(default_mail[recipient_field].value).to_not include "captain@example.com"
+    expect(default_mail[recipient_field].value).to_not include "boss@email.com"
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include "has been updated by"
       expect(part.body.raw_source).to_not include content
     end
 
-    expect(unregistered_watchers_email[sent_mail_key].value).to_not include User.find(2).mail
-    expect(unregistered_watchers_email[sent_mail_key].value).to include "captain@example.com"
-    expect(unregistered_watchers_email[sent_mail_key].value).to_not include "boss@email.com"
+    expect(unregistered_watchers_email[recipient_field].value).to_not include User.find(2).mail
+    expect(unregistered_watchers_email[recipient_field].value).to include "captain@example.com"
+    expect(unregistered_watchers_email[recipient_field].value).to_not include "boss@email.com"
     unregistered_watchers_email.parts.each do |part|
       expect(part.body.raw_source).to_not include "has been updated by"
       expect(part.body.raw_source).to include content
@@ -187,9 +188,9 @@ describe IssuesController, type: :controller do
 
     default_mail = ActionMailer::Base.deliveries.first
 
-    expect(default_mail[sent_mail_key].value).to include User.find(2).mail
-    expect(default_mail[sent_mail_key].value).to_not include "captain@example.com"
-    expect(default_mail[sent_mail_key].value).to_not include "boss@email.com"
+    expect(default_mail[recipient_field].value).to include User.find(2).mail
+    expect(default_mail[recipient_field].value).to_not include "captain@example.com"
+    expect(default_mail[recipient_field].value).to_not include "boss@email.com"
     default_mail.parts.each do |part|
       expect(part.body.raw_source).to include "has been updated by"
       expect(part.body.raw_source).to_not include content
@@ -218,7 +219,7 @@ describe IssuesController, type: :controller do
     default_mails = ActionMailer::Base.deliveries.select { |mail|
       mail['subject'].value == "[eCookbook - Bug #1] (Closed) Cannot print recipes"
     }
-    default_mails_recipients = default_mails.map { |m| m[sent_mail_key].value }.flatten.uniq
+    default_mails_recipients = default_mails.map { |m| m[recipient_field].value }.flatten.uniq
     expect(default_mails_recipients).to include(User.find(2).mail)
     expect(default_mails_recipients).to_not include("captain@example.com")
     expect(default_mails_recipients).to_not include("boss@email.com")
@@ -320,7 +321,7 @@ describe IssuesController, type: :controller do
       expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
       unregistered_watchers_email = ActionMailer::Base.deliveries.first
-      expect(unregistered_watchers_email[sent_mail_key].value).to include "some_provider@example.com"
+      expect(unregistered_watchers_email[recipient_field].value).to include "some_provider@example.com"
       unregistered_watchers_email.parts.each do |part|
         expect(part.body.raw_source).to include content_for_tracker_1
       end
@@ -345,7 +346,7 @@ describe IssuesController, type: :controller do
       expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
       unregistered_watchers_email = ActionMailer::Base.deliveries.first
-      expect(unregistered_watchers_email[sent_mail_key].value).to include "some_provider@example.com"
+      expect(unregistered_watchers_email[recipient_field].value).to include "some_provider@example.com"
       unregistered_watchers_email.parts.each do |part|
         expect(part.body.raw_source).to include content_for_tracker_2
       end
@@ -371,7 +372,7 @@ describe IssuesController, type: :controller do
       expect(response).to redirect_to(:controller => 'issues', :action => 'show', :id => Issue.last.id)
 
       unregistered_watchers_email = ActionMailer::Base.deliveries.first
-      expect(unregistered_watchers_email[sent_mail_key].value).to include "some_provider_03@example.com"
+      expect(unregistered_watchers_email[recipient_field].value).to include "some_provider_03@example.com"
       unregistered_watchers_email.parts.each do |part|
         expect(part.body.raw_source).to include "Email body content for status 2"
       end

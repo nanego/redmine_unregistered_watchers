@@ -63,7 +63,6 @@ describe "IssuesHelperPatch" do
     expect(result).to include(html)
   end
 
-
   ### core tests for core properties ('attr', 'attachment' and 'cf')
 
   it "should IssuesHelper#show_detail with no_html should show a changing attribute" do
@@ -106,14 +105,12 @@ describe "IssuesHelperPatch" do
     expect(html).to include('<del><i>50</i></del>')
   end
 
-
-
   it "should IssuesHelper#show_detail with a start_date attribute should format the dates" do
     detail = JournalDetail.new(
-        :property  => 'attr',
-        :old_value => '2010-01-01',
-        :value     => '2010-01-31',
-        :prop_key  => 'start_date'
+      :property => 'attr',
+      :old_value => '2010-01-01',
+      :value => '2010-01-31',
+      :prop_key => 'start_date'
     )
     assert_match "01/31/2010", show_detail(detail, true)
     assert_match "01/01/2010", show_detail(detail, true)
@@ -121,10 +118,10 @@ describe "IssuesHelperPatch" do
 
   it "should IssuesHelper#show_detail with a due_date attribute should format the dates" do
     detail = JournalDetail.new(
-        :property  => 'attr',
-        :old_value => '2010-01-01',
-        :value     => '2010-01-31',
-        :prop_key  => 'due_date'
+      :property => 'attr',
+      :old_value => '2010-01-01',
+      :value => '2010-01-31',
+      :prop_key => 'due_date'
     )
     assert_match "01/31/2010", show_detail(detail, true)
     assert_match "01/01/2010", show_detail(detail, true)
@@ -174,14 +171,11 @@ describe "IssuesHelperPatch" do
   end
 
   it "should IssuesHelper#show_detail should show old and new values with a estimated hours attribute" do
-    # Redmine 5 timespan_format by default is minutes
-    default_format = Setting.timespan_format
-    Setting.timespan_format = 'decimal'
-    detail = JournalDetail.new(:property => 'attr', :prop_key => 'estimated_hours', :old_value => '5', :value => '6.3')
-    assert_match '5.00', show_detail(detail, true)
-    assert_match '6.30', show_detail(detail, true)
-    Setting.timespan_format = default_format
-
+    with_settings :timespan_format => 'minutes' do
+      detail = JournalDetail.new(:property => 'attr', :prop_key => 'estimated_hours', :old_value => '5', :value => '6.5')
+      assert_match '5:00', show_detail(detail, true)
+      assert_match '6:30', show_detail(detail, true)
+    end
   end
 
   it "should IssuesHelper#show_detail should show old and new values with a custom field" do

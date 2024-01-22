@@ -1,5 +1,5 @@
 module RedmineUnregisteredWatchers
-    module Hooks
+  module Hooks
     class Hooks < Redmine::Hook::ViewListener
 
       # adds our css on each page
