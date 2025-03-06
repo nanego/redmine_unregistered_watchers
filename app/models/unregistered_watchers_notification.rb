@@ -1,4 +1,4 @@
-class UnregisteredWatchersNotification < ActiveRecord::Base
+class UnregisteredWatchersNotification < ApplicationRecord
   include Redmine::SafeAttributes
 
   belongs_to :project

@@ -51,7 +51,7 @@ module RedmineUnregisteredWatchers::IssuePatch
   end
 end
 
-class Issue < ActiveRecord::Base
+class Issue
   include RedmineUnregisteredWatchers::IssuePatch
   after_create :send_notification_to_unregistered_watchers
 end

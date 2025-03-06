@@ -1,6 +1,6 @@
 require_dependency 'project'
 
-class Project < ActiveRecord::Base
+class Project
   has_many :unregistered_watchers_notifications, dependent: :destroy
 
   safe_attributes :unreg_watchers_all_trackers, :unreg_watchers_tracker_ids

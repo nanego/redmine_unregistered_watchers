@@ -1,4 +1,4 @@
-class UnregisteredWatcher < ActiveRecord::Base
+class UnregisteredWatcher < ApplicationRecord
   include Redmine::SafeAttributes
 
   belongs_to :issue

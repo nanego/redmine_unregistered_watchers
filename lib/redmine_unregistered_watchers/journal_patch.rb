@@ -1,6 +1,6 @@
 require_dependency 'journal'
 
-class Journal < ActiveRecord::Base
+class Journal
 
   attr_accessor :recipients
   attr_accessor :history_id

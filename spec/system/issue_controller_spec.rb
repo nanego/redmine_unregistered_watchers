@@ -1,22 +1,6 @@
 require "spec_helper"
 require "active_support/testing/assertions"
 
-def log_user(login, password)
-  visit '/my/page'
-  expect(current_path).to eq '/login'
-
-  if Redmine::Plugin.installed?(:redmine_scn)
-    click_on("ou s'authentifier par login / mot de passe")
-  end
-
-  within('#login-form form') do
-    fill_in 'username', with: login
-    fill_in 'password', with: password
-    find('input[name=login]').click
-  end
-  expect(current_path).to eq '/my/page'
-end
-
 describe "issue/show", type: :system do
   include ActiveSupport::Testing::Assertions
 
