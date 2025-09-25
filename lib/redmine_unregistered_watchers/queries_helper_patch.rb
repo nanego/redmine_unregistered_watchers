@@ -14,7 +14,6 @@ module RedmineUnregisteredWatchers
   end
 end
 
-QueriesHelper.include IssuesHelper
 QueriesHelper.prepend RedmineUnregisteredWatchers::QueriesHelperPatch
 ActionView::Base.prepend QueriesHelper
 IssuesController.prepend QueriesHelper
