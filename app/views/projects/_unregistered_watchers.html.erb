@@ -16,7 +16,7 @@
       <% @project.trackers.sorted.each do |tracker| %>
         <label class="block selected_trackers" style="padding-left:2em;">
           <%= check_box_tag 'project[unreg_watchers_tracker_ids][]', tracker.id,
-                            @project.unreg_watchers_tracker_ids.include?(tracker.id), :id => "unreg_watchers_tracker_#{tracker.id}" %>
+                            (@project.unreg_watchers_tracker_ids || []).include?(tracker.id), :id => "unreg_watchers_tracker_#{tracker.id}" %>
           <%= tracker.name %>
         </label>
       <% end %>
