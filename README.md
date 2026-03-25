@@ -15,25 +15,37 @@ Examples:
 
     Standard attributes:
     {id}
-    {status}
     {subject}
+    {description}
+    {status}
     {tracker}
     {priority}
+    {author}
+    {assigned_to}
+    {category}
     {fixed_version}
+    {done_ratio}
+    {estimated_hours}
     {created_on}
-    etc.
-    
+    {updated_on}
+    {start_date}
+    {due_date}
+    {closed_on}
+
     To display dates with time, just add "with_time" after the attribute name, like this:
     {created_on_with_time}
     {updated_on_with_time}
+    {due_date_with_time}
+
+    Any other public method of the Issue model can also be used as a variable.
 
     Custom fields:
     by id: {cf_5}
     by name: {cf_name_of_the_field} (replace spaces by underscores)
 
     Special attributes:
-    {last_note}
-    {magic_link_*magic-link-rule-id*} (Only available if the magic-link plugin is installed)
+    {last_note}       (last public non-private journal note)
+    {magic_link_*magic-link-rule-id*}  (Only available if the magic-link plugin is installed)
 
 The previous syntax using greater and less signs (like <<tracker>> or <<last_note>>) is deprecated and does not provide as much attributes.
  
@@ -67,12 +79,12 @@ Test status
 
 |Plugin branch| Redmine Version | Test Status       |
 |-------------|-----------------|-------------------|
-|master       | 6.0.7           | [![6.0.7][1]][5]  |
-|master       | 6.1.0           | [![6.1.0][2]][5]  |
-|master       | master          | [![master][4]][5] |
+|master       | 6.0.9           | [![6.0.9][1]][5]  |
+|master       | 6.1.2           | [![6.1.2][2]][5]  |
+|master       | master          | [![master][3]][5] |
 
-[1]: https://github.com/nanego/redmine_unregistered_watchers/actions/workflows/6_0_7.yml/badge.svg
-[2]: https://github.com/nanego/redmine_unregistered_watchers/actions/workflows/6_1_0.yml/badge.svg
+[1]: https://github.com/nanego/redmine_unregistered_watchers/actions/workflows/6_0_9.yml/badge.svg
+[2]: https://github.com/nanego/redmine_unregistered_watchers/actions/workflows/6_1_2.yml/badge.svg
 [3]: https://github.com/nanego/redmine_unregistered_watchers/actions/workflows/master.yml/badge.svg
 [5]: https://github.com/nanego/redmine_unregistered_watchers/actions
 
