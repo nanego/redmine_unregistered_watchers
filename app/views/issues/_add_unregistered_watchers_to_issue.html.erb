@@ -47,7 +47,7 @@
                   }
               },
               ajax: {
-                  url: "/ldap_minequip/search.json?key=<%= User.current.api_key %>",
+                  url: "/ldap_minequip/search_mail",
                   dataType: 'json',
                   delay: 250,
                   method: 'GET',
@@ -56,9 +56,7 @@
                           mail: params.term
                       };
                   },
-                  processResults: function (data, params) {
-                      params.page = params.page || 1;
-                      console.log(data.results);
+                  processResults: function (data) {
                       return {
                           results: data.results
                       };
