@@ -1,3 +1,11 @@
+/* Base positioning for the plugin's own raster icons (removed from Redmine 7.0 core);
+   scoped to elements without an SVG icon so it never affects sprite icons. */
+.icon:not(:has(svg)) {
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+  padding-left: 20px;
+}
+
 .icon-x-close { background-image: url(../../../images/close.png); margin-left:4px; margin-right:2px; }
 
 .icon-unregistered-watchers, #admin-menu a.unregistered-watchers { background-image: url(../images/mailic.png); }

@@ -34,8 +34,7 @@ module RedmineUnregisteredWatchers
       end
     end
 
-    # Journals of resent notifications are attached to an UnregisteredWatchersHistory,
-    # which has neither watchers nor an assignee
+    # An UnregisteredWatchersHistory has neither watchers nor an assignee
     def add_watcher
       if journalized_type == "UnregisteredWatchersHistory"
         true

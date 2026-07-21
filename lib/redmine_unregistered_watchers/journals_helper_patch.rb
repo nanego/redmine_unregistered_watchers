@@ -7,12 +7,11 @@ module RedmineUnregisteredWatchers::JournalsHelperPatch
     content << content_tag('div', simple_format("Destinataires : #{recipients}"), :class => 'content')
     links = []
     if !journal.notes.blank?
-      links << link_to(l(:button_quote),
+      links << link_to(sprite_icon('comment', l(:button_quote), icon_only: true),
                        quoted_issue_path(issue, :journal_id => journal),
                        :remote => true,
                        :method => 'post',
-                       :title => l(:button_quote),
-                       :class => 'icon-only icon-comment'
+                       :title => l(:button_quote)
       ) if options[:reply_links]
     end
     content << content_tag('div', links.join(' ').html_safe, :class => 'contextual') unless links.empty?
