@@ -26,7 +26,8 @@ end
 Redmine::MenuManager.map :admin_menu do |menu|
   menu.push :unregistered_watchers, { :controller => :unregistered_watchers, :action => :settings },
             :caption => :field_unregistered_watchers,
-            :html => { :class => 'icon' }
+            :icon => 'email',
+            :html => { :class => 'icon icon-email' }
 end
 
 # Support for Redmine 5

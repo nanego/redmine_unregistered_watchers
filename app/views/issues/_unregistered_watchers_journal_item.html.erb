@@ -4,9 +4,9 @@
     <div class="contextual">
       <span class="journal-actions">
         <% if !journal.persisted? && User.current.allowed_to?(:resend_unregistered_watchers_notification, @project) %>
-          <%= link_to l(:resend_this_mail),
+          <%= link_to sprite_icon('email', l(:resend_this_mail)),
                       resend_unregistered_watchers_notification_path(issue_id: @issue.id, history_id: journal.history_id),
-                      method: :post, class: "icon icon-notified" %>
+                      method: :post, class: "icon" %>
         <% end %>
       </span>
     </div>
