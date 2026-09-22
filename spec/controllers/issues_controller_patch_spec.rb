@@ -416,4 +416,18 @@ describe IssuesController, type: :controller do
     expect(issue.unregistered_watchers.map(&:email)).to include "some_provider@example.com"
   end
 
+  it "creates a new issue when the same unregistered watcher is given twice" do
+    assert_difference 'Issue.count' do
+      post :create, params: { :project_id => 1,
+                              :issue => { :tracker_id => 3,
+                                          :subject => 'This is the test_new issue',
+                                          :priority_id => 5,
+                                          :unregistered_watchers => ["captain@example.com, boss@email.com,,",
+                                                                     " captain@example.com"],
+                                          :custom_field_values => { '2' => 'Value for field 2' } } }
+    end
+
+    expect(Issue.last.unregistered_watchers.map(&:email)).to contain_exactly("captain@example.com", "boss@email.com")
+  end
+
 end
