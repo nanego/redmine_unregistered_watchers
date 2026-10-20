@@ -1,6 +1,6 @@
 class UnregisteredWatchersController < ApplicationController
 
-  before_action :find_project, :only => [:update_status_notifications_per_project]
+  before_action :find_project, :authorize, :only => [:update_status_notifications_per_project]
   before_action :require_admin, :only => [:settings]
   layout "admin"
 
@@ -34,8 +34,7 @@ class UnregisteredWatchersController < ApplicationController
   private
 
   def find_project
-    project_id = params[:notifications][:project_id]
-    @project = Project.find(project_id)
+    @project = Project.find(params.dig(:notifications, :project_id))
   rescue ActiveRecord::RecordNotFound
     render_404
   end

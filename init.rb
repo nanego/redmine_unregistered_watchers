@@ -12,7 +12,7 @@ Redmine::Plugin.register :redmine_unregistered_watchers do
   requires_redmine_plugin :redmine_base_deface, :version_or_higher => '0.0.1'
   requires_redmine_plugin :redmine_base_select2, :version_or_higher => '4.0.0'
   project_module :unregistered_watchers do
-    permission :set_unregistered_watchers_to_issues, {}
+    permission :set_unregistered_watchers_to_issues, { unregistered_watchers: [:update_status_notifications_per_project] }
     permission :resend_unregistered_watchers_notification, { :issues => [:resend_unregistered_watchers_notification] }
   end
   settings :default => { 'emails_signature_for_unregistered_watchers' => "",
